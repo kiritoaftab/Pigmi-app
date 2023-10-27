@@ -2,6 +2,7 @@ package com.ot.pigmy.dto;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -9,6 +10,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -19,6 +21,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
 import io.swagger.annotations.ApiModelProperty;
@@ -119,5 +122,9 @@ public class Customer {
 	public void setCustomerAadharImage(CustomerAadharImage customerAadharImage) {
 		this.customerAadharImage = customerAadharImage;
 	}
+	
+	@OneToMany(mappedBy = "customer",cascade = CascadeType.ALL)
+	@JsonManagedReference("tax")
+	private List<CustomerAccount> customerAccount;
 
 }
