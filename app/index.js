@@ -1,10 +1,11 @@
-import { View, Text, ScrollView, SafeAreaView } from "react-native";
+import { View, Text, ScrollView, SafeAreaView, TouchableOpacity } from "react-native";
 import { useState } from "react";
 import { Stack, useRouter } from "expo-router";
 
 import { COLORS, icons, images, SIZES } from "../constants";
 
 import {Topbanner, AddCustomer, AddPigmi} from '../components'
+
 
 const Home = () => {
     const router = useRouter();
@@ -25,7 +26,7 @@ const Home = () => {
                     flex:1,
                     padding:SIZES.medium,
                     backgroundColor:COLORS.green,
-                    borderWidth:0.1,
+                    
                     borderBottomLeftRadius:30,
                     borderBottomRightRadius:30,   
                 }}> 
@@ -39,12 +40,11 @@ const Home = () => {
                     alignItems:"center",
                     alignSelf:"center",
                     height:"69%",
-                    borderWidth:0.1,
                     borderRadius:30,
                 }}>
-                    <AddCustomer 
-                        handleClick= {()=> router.push('/customer')}
-                    />
+                    <TouchableOpacity onPress={() => router.push('/home')}>
+                        <Text>Testing</Text>
+                    </TouchableOpacity>
                     <AddPigmi 
                         handleClick={()=> router.push('/pigmi')}
                     />

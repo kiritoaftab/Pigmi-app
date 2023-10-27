@@ -17,4 +17,8 @@ public interface CustomerRepository extends JpaRepository<Customer, String> {
 	
 	public Optional<List<Customer>> findByAgentId(String agentId);
 
+	public List<Customer> findByCustomerNameContaining(String customerName);
+
+	public Customer findByIdAndAgentId(String id, String agentId);
+
 }

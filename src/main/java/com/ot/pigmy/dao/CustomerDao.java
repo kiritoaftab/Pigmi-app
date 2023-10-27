@@ -3,6 +3,8 @@ package com.ot.pigmy.dao;
 import java.util.List;
 import java.util.Optional;
 
+import com.ot.pigmy.dto.CustomerAccount;
+import com.ot.pigmy.repository.CustomerAccountNumberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -17,6 +19,9 @@ public class CustomerDao {
 
 	@Autowired
 	private CustomerRepository customerRepository;
+
+	@Autowired
+	private CustomerAccountNumberRepository customerAccountNumberRepository;
 
 	public Customer saveCustomer(Customer customer) {
 		return customerRepository.save(customer);
@@ -52,6 +57,26 @@ public class CustomerDao {
 	public Customer findByCustomerPhone(String phone) {
 		Optional<Customer> customer = customerRepository.findByPhone(phone);
 		return customer.orElse(null);
+	}
+
+	public Customer findByCustomerAccountNo(String accountNo){
+		Optional<CustomerAccount> customerAccount = customerAccountNumberRepository.findByAccountNumber(accountNo);
+
+		Optional<Customer> customer = customerRepository.findById(customerAccount.get().getCustomer().getId());
+
+		return customer.orElse(null);
+	}
+
+	public List<Customer> getAllCustomers(){
+		return  customerRepository.findAll();
+	}
+
+	public List<Customer> fetchCustomersByQuery(String query){
+		return customerRepository.findByCustomerNameContaining(query);
+	}
+
+	public Customer findByCustomerIdAndAgentId(String customerId, String agentId){
+		return customerRepository.findByIdAndAgentId(customerId,agentId);
 	}
 
 }

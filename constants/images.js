@@ -4,7 +4,9 @@ import addicon from "../assets/images/addicon.png"
 import addMoney from "../assets/images/dashicons_money.png"
 import leftArrow from "../assets/images/leftArrow2.png"
 import uploadImg from "../assets/images/uploadImage.png"
-
+import greentick from "../assets/images/greentick.png"
+import upiScanner from "../assets/images/upiScanner.jpeg"
+import doubleTick from "../assets/images/doubleTick.png"
 
 export default {
   profile,
@@ -12,5 +14,8 @@ export default {
   addicon,
   addMoney,
   leftArrow,
-  uploadImg
+  uploadImg,
+  greentick,
+  upiScanner,
+  doubleTick
 };

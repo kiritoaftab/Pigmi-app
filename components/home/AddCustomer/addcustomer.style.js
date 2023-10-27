@@ -7,9 +7,9 @@ const styles = StyleSheet.create({
         backgroundColor:COLORS.lightGreen,
         width:"80%",
         marginTop:"8%",
-        borderWidth:0.1,
+        
         borderRadius:20,
-        height:"40%"
+        height:"45%"
     },
     innerContainer:{
         flex:1,

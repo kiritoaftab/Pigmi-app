@@ -8,6 +8,6 @@ import com.ot.pigmy.dto.CustomerAccount;
 
 public interface CustomerAccountNumberRepository extends JpaRepository<CustomerAccount, Long> {
 
-	Optional<CustomerAccount> findByAccountNumber(long accountNumber);
+	Optional<CustomerAccount> findByAccountNumber(String accountNumber);
 
 }

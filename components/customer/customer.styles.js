@@ -69,8 +69,43 @@ const styles = StyleSheet.create({
         fontFamily:FONT.extraBold,
         color:COLORS.white,
         paddingTop:SIZES.xSmall
+    },
+    modalView:{
+        flex:1,
+        backgroundColor:COLORS.lightWhite,
+        alignItems:"center",
+        padding:SIZES.large
+    },
+    tickWrapper:{
+        marginVertical:SIZES.xLarge,
+    },
+    heading:{
+        fontFamily:FONT.extraBold,
+        fontSize:SIZES.xLarge,
+        marginVertical:SIZES.medium
+    },
+    customerId:{
+        fontFamily:FONT.light,
+        fontSize:SIZES.medium,
+        marginVertical:SIZES.medium,
+    },
+    para:{
+        fontFamily:FONT.regular,
+        textAlign:"center"
+    },
+    btnWrapper:{
+        backgroundColor:COLORS.green,
+        width:"20%",
+        height:SIZES.xxLarge,
+        alignItems:"center",
+        borderRadius:10,
+        marginVertical:SIZES.xxLarge
+    },
+    done:{
+        fontFamily:FONT.bold,
+        fontSize:SIZES.large,
+        color:COLORS.white
     }
-
 })
 
 export default styles;

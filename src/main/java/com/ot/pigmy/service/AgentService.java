@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 
+import com.ot.pigmy.dao.CustomerDao;
+import com.ot.pigmy.dto.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -13,11 +15,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.ot.pigmy.dao.AgentDao;
-import com.ot.pigmy.dto.Agent;
-import com.ot.pigmy.dto.AgentAadharCardImage;
-import com.ot.pigmy.dto.AgentPanCardImage;
-import com.ot.pigmy.dto.AgentProfileImage;
-import com.ot.pigmy.dto.ResponseStructure;
 import com.ot.pigmy.exception.DataNotFoundException;
 import com.ot.pigmy.exception.DuplicateDataEntryException;
 import com.ot.pigmy.exception.EmailIdNotFoundException;
@@ -37,6 +34,9 @@ public class AgentService {
 
 	@Autowired
 	private EmailSender emailSender;
+
+	@Autowired
+	private CustomerDao customerDao;
 
 	public ResponseEntity<ResponseStructure<Agent>> saveAgent(Agent agent) {
 
@@ -456,6 +456,7 @@ public class AgentService {
 				throw new IdNotFoundException("Agent ID " + input + ", NOT FOUND");
 			}
 		} else {
+
 			List<Agent> agents = agentDao.getAgentByName(input);
 			for (Agent agent : agents) {
 				if (agent.getAgentName().equalsIgnoreCase(input) && agents.size() > 0) {
@@ -471,4 +472,31 @@ public class AgentService {
 		}
 	}
 
+	public ResponseEntity<ResponseStructure<List<Customer>>> getCustomersByAgentId(String agentId){
+		ResponseStructure<List<Customer>> responseStructure = new ResponseStructure<>();
+		List<Customer> customerList = customerDao.findCustomerByAgentId(agentId);
+		if (customerList != null) {
+			responseStructure.setStatus(HttpStatus.OK.value());
+			responseStructure.setMessage("Fetched Customers Details By Agent Id");
+			responseStructure.setData(customerList);
+			return new ResponseEntity<>(responseStructure, HttpStatus.OK);
+		} else {
+			throw new IdNotFoundException("No customers for " + agentId);
+		}
+
+	}
+
+	public ResponseEntity<ResponseStructure<Customer>> verifyCustomerBelongsToAgent(String agentId, String customerId){
+		ResponseStructure<Customer> responseStructure = new ResponseStructure<>();
+		Customer customer = customerDao.findByCustomerIdAndAgentId(customerId,agentId);
+		if (customer != null) {
+			responseStructure.setStatus(HttpStatus.OK.value());
+			responseStructure.setMessage("Customer belongs to Agent ");
+			responseStructure.setData(customer);
+			return new ResponseEntity<>(responseStructure, HttpStatus.OK);
+		} else {
+			throw new IdNotFoundException("No customers for " + agentId);
+		}
+
+	}
 }

@@ -36,15 +36,13 @@ public class CustomerAccount {
 	@Column(unique = true)
 	@NotNull
 	@ApiModelProperty(required = true)
-	private long accountNumber;
+	private String accountNumber;
 
 	@NotBlank
 	@ApiModelProperty(required = true)
 	private String accountType;
 
 	@ApiModelProperty(required = true)
-	@Getter(value = AccessLevel.NONE)
-	@Setter(value = AccessLevel.NONE)
 	private double balance;
 
 	@JsonGetter

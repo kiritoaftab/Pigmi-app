@@ -1,18 +1,21 @@
-import {View, Text, Image} from "react-native"
+import { View, Text, Image ,TextInput, TouchableOpacity} from "react-native";
 import styles from "./topbanner.style";
 import { COLORS, icons, images, SIZES } from "../../../constants";
+import { useState } from "react";
 
 const Topbanner = () => {
-    return(
-        <View  style={styles.container}>
-            <View style={styles.bankHeaderWrapper}>
-                <Image
-                    source={images.banklogo}
-                    resizeMode="contain"
-                    style={styles.banklogo}
-                />
-            </View>
-            <View style={styles.agentWrapper}>
+    const [searchTerm, setSearchTerm] = useState(null)
+  return (
+    <View style={styles.container}>
+      <View style={styles.bankHeaderWrapper}>
+        <Image
+          source={images.banklogo}
+          resizeMode="contain"
+          style={styles.banklogo}
+        />
+      </View>
+
+      <View style={styles.agentWrapper}>
                 <View style={styles.profileImageWrapper}>
                     <Image 
                         source={images.profile}
@@ -27,9 +30,8 @@ const Topbanner = () => {
                 </View>
                 <Text style={styles.agentText}>Agent Id : AG101</Text>
             </View>
-            
-        </View>
-    )
-}
+    </View>
+  );
+};
 
 export default Topbanner;

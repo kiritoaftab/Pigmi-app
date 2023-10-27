@@ -3,6 +3,7 @@ package com.ot.pigmy.controller;
 import java.io.IOException;
 import java.util.List;
 
+import com.ot.pigmy.dto.Customer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
@@ -201,5 +202,23 @@ public class AgentController {
 	public ResponseEntity<?> getAgentByIdOrAgentByName(@RequestParam String agentId) {
 		return agentService.getAgentByIdOrAgentByName(agentId);
 	}
+
+
+	@ApiOperation(value = "Fetch Customers for Agent ", notes = "Input is Agent Id")
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Success"),
+			@ApiResponse(code = 404, message = "Not Found") })
+	@GetMapping(value = "/getCustomers", produces = { MediaType.APPLICATION_JSON_VALUE })
+	public ResponseEntity<ResponseStructure<List<Customer>>> getCustomers(@RequestParam String agentId) {
+		return agentService.getCustomersByAgentId(agentId);
+	}
+
+	@ApiOperation(value = "Verify Customer Agent mapping ", notes = "Input is Agent Id")
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Success"),
+			@ApiResponse(code = 404, message = "Not Found") })
+	@GetMapping(value = "/verifyCustomer", produces = { MediaType.APPLICATION_JSON_VALUE })
+	public ResponseEntity<ResponseStructure<Customer>> getCustomers(@RequestParam String agentId, @RequestParam String customerId) {
+		return agentService.verifyCustomerBelongsToAgent(agentId,customerId);
+	}
+
 
 }

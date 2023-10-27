@@ -18,7 +18,7 @@ const AddCustomer = ({handleClick}) => {
                 
                 <View style={styles.customerWrapper}>
                     <Text style={styles.headerText}>Add Customer</Text>
-                    <Text style={styles.para}>With just a simple click, you can effortlessly add a new customer to our system and initiate the process of creating their digital money signature with the bank.</Text>
+                    <Text style={styles.para}>With one click, you can effortlessly add a new customer to our system and initiate the process of creating their digital money signature with the bank.</Text>
                 </View>
             </TouchableOpacity>
         </View>
