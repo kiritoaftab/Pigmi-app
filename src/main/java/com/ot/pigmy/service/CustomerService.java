@@ -2,7 +2,6 @@ package com.ot.pigmy.service;
 
 import com.ot.pigmy.dao.AgentDao;
 import com.ot.pigmy.dao.CustomerDao;
-import com.ot.pigmy.dto.Agent;
 import com.ot.pigmy.dto.Customer;
 import com.ot.pigmy.dto.CustomerAccount;
 import com.ot.pigmy.dto.ResponseStructure;
@@ -63,11 +62,17 @@ public class CustomerService {
         ResponseStructure<CustomerAccount> responseStructure = new ResponseStructure<>();
 
         if(customerDao.findCustomerById(request.getCustomerId()) == null){
+            responseStructure.setMessage("Customer Account Doesn't exist "+request.getCustomerId());
             throw new DuplicateDataEntryException("Customer Account Doesn't exist "+request.getCustomerId());
         }
         if(customerAccountNumberRepository.findByAccountNumber(request.getAccountNumber()).isPresent()){
             throw new DuplicateDataEntryException("Account number already exists "+request.getAccountNumber());
-        }else{
+        }
+        if(customerAccountNumberRepository.findByCustomerIdAndAccountType(request.getCustomerId(), request.getAccountType()).isPresent()){
+            throw new DuplicateDataEntryException("Account Type already exists for Customer "+request.getAccountType());
+        }
+
+        else{
             CustomerAccount customerAccount = new CustomerAccount();
             customerAccount.setCustomer(customerDao.findCustomerById(request.getCustomerId()));
             customerAccount.setAccountNumber(request.getAccountNumber());
@@ -116,6 +121,9 @@ public class CustomerService {
         List<Customer> customerList = new ArrayList<>();
         if(query.matches(".*\\d.*")){
             Customer customer = customerDao.findCustomerById(query);
+            if(customer==null){
+                throw  new IdNotFoundException("Customer id "+query+" not found");
+            }
             customerList.add(customer);
         }else {
             customerList = customerDao.fetchCustomersByQuery(query);

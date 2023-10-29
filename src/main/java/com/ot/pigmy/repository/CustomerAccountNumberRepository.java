@@ -10,4 +10,5 @@ public interface CustomerAccountNumberRepository extends JpaRepository<CustomerA
 
 	Optional<CustomerAccount> findByAccountNumber(String accountNumber);
 
+	Optional<CustomerAccount> findByCustomerIdAndAccountType(String customerId, String accountType);
 }

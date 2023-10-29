@@ -13,11 +13,12 @@ const styles = StyleSheet.create({
     },
     bankHeaderWrapper:{
         padding:SIZES.medium,
-        
+        alignItems:"center"
     },
     banklogo:{
-        height:50,
-        width:170
+        height:70,
+        width:200,
+        borderRadius:30,
     },
     searchContainer: {
         justifyContent: "center",

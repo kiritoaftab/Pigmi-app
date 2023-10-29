@@ -10,6 +10,7 @@ import TopMoneybanner from "./money/banner/TopMoneybanner";
 import AddMoney from "./money/form/AddMoney";
 import TopTxnBanner from "./transactions/banner/TxnTopbanner";
 import TxnDetails from "./transactions/card/TxnDetails";
+import LoginForm from "./login/LoginForm";
 
 export {
     Topbanner,
@@ -23,5 +24,6 @@ export {
     TopMoneybanner,
     AddMoney,
     TopTxnBanner,
-    TxnDetails
+    TxnDetails,
+    LoginForm
 };

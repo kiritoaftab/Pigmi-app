@@ -78,7 +78,7 @@ public class ApplicationExceptionHandler extends ResponseEntityExceptionHandler 
 	public ResponseEntity<ResponseStructure<String>> handleDuplicateDataEntry(DuplicateDataEntryException exception) {
 		ResponseStructure<String> responseStructure = new ResponseStructure<String>();
 		responseStructure.setStatus(HttpStatus.CONFLICT.value());
-		responseStructure.setMessage(" Already Exist's");
+		responseStructure.setMessage(" Already Exists");
 		responseStructure.setData(exception.getMessage());
 		return new ResponseEntity<>(responseStructure, HttpStatus.CONFLICT);
 	}

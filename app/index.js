@@ -7,7 +7,7 @@ import { COLORS, icons, images, SIZES } from "../constants";
 import {Topbanner, AddCustomer, AddPigmi} from '../components'
 
 
-const Home = () => {
+const Start = () => {
     const router = useRouter();
 
     return (
@@ -55,4 +55,4 @@ const Home = () => {
     )
 }
 
-export default Home;
+export default Start;
