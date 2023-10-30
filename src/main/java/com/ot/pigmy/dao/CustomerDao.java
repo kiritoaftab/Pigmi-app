@@ -59,7 +59,7 @@ public class CustomerDao {
 		return customer.orElse(null);
 	}
 
-	public Customer findByCustomerAccountNo(String accountNo){
+	public Customer findByCustomerAccountNo(String accountNo) {
 		Optional<CustomerAccount> customerAccount = customerAccountNumberRepository.findByAccountNumber(accountNo);
 
 		Optional<Customer> customer = customerRepository.findById(customerAccount.get().getCustomer().getId());
@@ -67,16 +67,19 @@ public class CustomerDao {
 		return customer.orElse(null);
 	}
 
-	public List<Customer> getAllCustomers(){
-		return  customerRepository.findAll();
+	public List<Customer> getAllCustomers() {
+		return customerRepository.findAll();
 	}
 
-	public List<Customer> fetchCustomersByQuery(String query){
+	public List<Customer> fetchCustomersByQuery(String query) {
 		return customerRepository.findByCustomerNameContaining(query);
 	}
 
-	public Customer findByCustomerIdAndAgentId(String customerId, String agentId){
-		return customerRepository.findByIdAndAgentId(customerId,agentId);
+	public Customer findByCustomerIdAndAgentId(String customerId, String agentId) {
+		return customerRepository.findByIdAndAgentId(customerId, agentId);
 	}
 
+	public List<Customer> findByAgentIdAndCustomerName(String agentId, String query) {
+		return customerRepository.findByAgentIdAndCustomerNameContaining(agentId, query);
+	}
 }

@@ -80,10 +80,10 @@ public class Agent {
 	private String address;
 
 	@NotNull(message = "Please Enter the Agent-Aadhaar_Number")
+	@Pattern(regexp = "^[0-9]{12}+$", message = "Enter Proper Agent-Aadhaar_Number")
 	@ApiModelProperty(required = true)
-	private long aadhaarNumber;
+	private String aadhaarNumber;
 
-	@NotNull(message = "Please Enter the Agent-Designation")
 	@ApiModelProperty(required = true)
 	private String designation;
 

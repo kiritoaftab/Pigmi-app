@@ -48,6 +48,7 @@ public class AgentService {
 
 		} else {
 			agent.setPassword(Encryption.encrypt(agent.getPassword()));
+			agent.setDesignation("AGENT");
 			emailSender.sendSimpleEmail(agent.getEmail(),
 					"Greetings \nYour Profile in Pigmy Account Has Been Created.\nThank You.",
 					"Hello " + agent.getAgentName());
@@ -472,7 +473,7 @@ public class AgentService {
 		}
 	}
 
-	public ResponseEntity<ResponseStructure<List<Customer>>> getCustomersByAgentId(String agentId){
+	public ResponseEntity<ResponseStructure<List<Customer>>> getCustomersByAgentId(String agentId) {
 		ResponseStructure<List<Customer>> responseStructure = new ResponseStructure<>();
 		List<Customer> customerList = customerDao.findCustomerByAgentId(agentId);
 		if (customerList != null) {
@@ -486,9 +487,9 @@ public class AgentService {
 
 	}
 
-	public ResponseEntity<ResponseStructure<Customer>> verifyCustomerBelongsToAgent(String agentId, String customerId){
+	public ResponseEntity<ResponseStructure<Customer>> verifyCustomerBelongsToAgent(String agentId, String customerId) {
 		ResponseStructure<Customer> responseStructure = new ResponseStructure<>();
-		Customer customer = customerDao.findByCustomerIdAndAgentId(customerId,agentId);
+		Customer customer = customerDao.findByCustomerIdAndAgentId(customerId, agentId);
 		if (customer != null) {
 			responseStructure.setStatus(HttpStatus.OK.value());
 			responseStructure.setMessage("Customer belongs to Agent ");
@@ -499,4 +500,5 @@ public class AgentService {
 		}
 
 	}
+
 }

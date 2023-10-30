@@ -1,13 +1,12 @@
 package com.ot.pigmy.dao;
 
-import com.ot.pigmy.dto.CustomerAccount;
-import com.ot.pigmy.dto.Transaction;
-import com.ot.pigmy.repository.CustomerAccountNumberRepository;
-import com.ot.pigmy.repository.TransactionRepository;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import java.util.Optional;
+import com.ot.pigmy.dto.CustomerAccount;
+import com.ot.pigmy.repository.CustomerAccountNumberRepository;
 
 @Repository
 public class CustomerAccountDao {

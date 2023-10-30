@@ -69,7 +69,6 @@ public class Customer {
 	private String phone;
 
 	@Column(unique = true)
-	@NotBlank(message = "Please Enter The Customer-Email")
 	@Pattern(regexp = "^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$", message = "Enter a Valid Customer-Email")
 	@ApiModelProperty(required = true)
 	private String email;
@@ -122,8 +121,8 @@ public class Customer {
 	public void setCustomerAadharImage(CustomerAadharImage customerAadharImage) {
 		this.customerAadharImage = customerAadharImage;
 	}
-	
-	@OneToMany(mappedBy = "customer",cascade = CascadeType.ALL)
+
+	@OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
 	@JsonManagedReference("tax")
 	private List<CustomerAccount> customerAccount;
 

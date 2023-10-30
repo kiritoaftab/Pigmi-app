@@ -2,9 +2,8 @@ package com.ot.pigmy.dto.request;
 
 import com.ot.pigmy.dto.Customer;
 import com.ot.pigmy.dto.Transaction;
-import lombok.Data;
 
-import java.time.LocalTime;
+import lombok.Data;
 
 @Data
 public class TransactionResp {

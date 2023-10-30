@@ -20,7 +20,7 @@ import io.swagger.annotations.ApiResponses;
 @RestController
 @RequestMapping("/password")
 @CrossOrigin(origins = "*")
-public class PasswordResetController {
+public class AgentPasswordResetController {
 
 	@Autowired
 	private AgentService agentService;
@@ -28,7 +28,7 @@ public class PasswordResetController {
 	@ApiOperation(value = "Forget Password", notes = "Inputs are User-Email and return Uuid")
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Success"),
 			@ApiResponse(code = 404, message = "Not Fond") })
-	@PostMapping(value = "/verifyEmailBeforeUpdatePassword/{email}", produces = { MediaType.APPLICATION_JSON_VALUE})
+	@PostMapping(value = "/verifyEmailBeforeUpdatePassword/{email}", produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<ResponseStructure<Object>> validateUserByEmail(@PathVariable String email) {
 		return agentService.verifyEmailBeforeUpdate(email);
 	}
@@ -36,7 +36,7 @@ public class PasswordResetController {
 	@ApiOperation(value = "Forget Password", notes = "Inputs are User-Password and return User Object")
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Success"),
 			@ApiResponse(code = 404, message = "Not Found") })
-	@PatchMapping(value = "/forget/{uuid}/{newPassword}", produces = { MediaType.APPLICATION_JSON_VALUE})
+	@PatchMapping(value = "/forget/{uuid}/{newPassword}", produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<ResponseStructure<Object>> updatePassword(@PathVariable String uuid,
 			@PathVariable String newPassword) {
 		return agentService.updatePasswordByUuid(uuid, newPassword);
