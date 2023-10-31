@@ -3,8 +3,6 @@ package com.ot.pigmy.dao;
 import java.util.List;
 import java.util.Optional;
 
-import com.ot.pigmy.dto.CustomerAccount;
-import com.ot.pigmy.repository.CustomerAccountNumberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -12,6 +10,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 
 import com.ot.pigmy.dto.Customer;
+import com.ot.pigmy.dto.CustomerAccount;
+import com.ot.pigmy.repository.CustomerAccountNumberRepository;
 import com.ot.pigmy.repository.CustomerRepository;
 
 @Repository
@@ -78,7 +78,9 @@ public class CustomerDao {
 	public Customer findByCustomerIdAndAgentId(String customerId, String agentId) {
 		return customerRepository.findByIdAndAgentId(customerId, agentId);
 	}
-
+	public void deleteCustomer(Customer customer) {
+		customerRepository.delete(customer);
+	}
 	public List<Customer> findByAgentIdAndCustomerName(String agentId, String query) {
 		return customerRepository.findByAgentIdAndCustomerNameContaining(agentId, query);
 	}

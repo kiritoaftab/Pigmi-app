@@ -128,7 +128,7 @@ public class AgentService {
 		}
 	}
 
-	public ResponseEntity<ResponseStructure<Agent>> getAdminByEmail(String email) {
+	public ResponseEntity<ResponseStructure<Agent>> getAgentByEmail(String email) {
 		Agent agent = agentDao.getAgentByEmail(email);
 		if (agent != null) {
 			ResponseStructure<Agent> responseStructure = new ResponseStructure<>();

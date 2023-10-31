@@ -92,7 +92,7 @@ public class AgentController {
 			@ApiResponse(code = 404, message = "Not Found") })
 	@GetMapping(value = "/email/{email}", produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<ResponseStructure<Agent>> findAdminByEmail(@PathVariable String email) {
-		return agentService.getAdminByEmail(email);
+		return agentService.getAgentByEmail(email);
 	}
 
 	@ApiOperation(value = "Fetch Agent By PhoneNumber", notes = "Input Is PhoneNumber Of The Agent Object And Return Agent Object With Id")

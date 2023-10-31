@@ -50,4 +50,9 @@ public class TransactionDao {
 		return transactions.orElse(null);
 	}
 
+	public Transaction findTransactionById(long id) {
+		Optional<Transaction> transactions = transactionRepository.findById(id);
+		return transactions.orElse(null);
+	}
+
 }

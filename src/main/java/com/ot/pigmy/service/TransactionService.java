@@ -2,6 +2,7 @@ package com.ot.pigmy.service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -9,12 +10,16 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.ot.pigmy.dao.AgentDao;
 import com.ot.pigmy.dao.CustomerAccountDao;
 import com.ot.pigmy.dao.CustomerDao;
 import com.ot.pigmy.dao.TransactionDao;
+import com.ot.pigmy.dto.Agent;
+import com.ot.pigmy.dto.Customer;
 import com.ot.pigmy.dto.CustomerAccount;
 import com.ot.pigmy.dto.ResponseStructure;
 import com.ot.pigmy.dto.Transaction;
+import com.ot.pigmy.dto.request.PrintTransactionDetails;
 import com.ot.pigmy.dto.request.TransactionResp;
 import com.ot.pigmy.exception.DataNotFoundException;
 import com.ot.pigmy.exception.DuplicateDataEntryException;
@@ -31,10 +36,14 @@ public class TransactionService {
 	private CustomerDao customerDao;
 
 	@Autowired
+	private AgentDao agentDao;
+
+	@Autowired
 	private CustomerAccountDao customerAccountDao;
 
 	@Autowired
 	private CustomerAccountNumberRepository customerAccountNumberRepository;
+
 	@Autowired
 	private EmailSender emailSender;
 
@@ -129,5 +138,41 @@ public class TransactionService {
 			throw new DataNotFoundException("No Such Transaction Found ");
 		}
 
+	}
+
+	public ResponseEntity<ResponseStructure<PrintTransactionDetails>> findByTransactionId(long id) {
+		ResponseStructure<PrintTransactionDetails> responseStructure = new ResponseStructure<>();
+		Transaction transaction = transactionDao.findTransactionById(id);
+		if (transaction != null) {
+			PrintTransactionDetails printTransactionDetails = new PrintTransactionDetails();
+			Customer customer = customerDao.findCustomerById(transaction.getCustomerId());
+			Optional<CustomerAccount> customerAccount = customerAccountNumberRepository
+					.findByAccountNumber(transaction.getAccountNumber());
+			Agent agent = agentDao.getAgentById(transaction.getAgentId());
+			if (customer != null) {
+				printTransactionDetails.setCustomerId(customer.getId());
+				printTransactionDetails.setCustomerName(customer.getCustomerName());
+			} else {
+				throw new IdNotFoundException("Customer Id Not Found");
+			}
+			if (customerAccount.isPresent()) {
+				printTransactionDetails.setCustomerAccountBalance(customerAccount.get().getBalance());
+			} else {
+				throw new IdNotFoundException("Customer Account Number Not Found");
+			}
+			if (agent != null) {
+				printTransactionDetails.setAgentId(agent.getId());
+				printTransactionDetails.setAgentName(agent.getAgentName());
+			} else {
+				throw new IdNotFoundException("Customer Id Not Found");
+			}
+			printTransactionDetails.setTransaction(transaction);
+			responseStructure.setStatus(HttpStatus.OK.value());
+			responseStructure.setMessage("Transaction Fetched Successfully");
+			responseStructure.setData(printTransactionDetails);
+			return new ResponseEntity<>(responseStructure, HttpStatus.OK);
+		} else {
+			throw new IdNotFoundException("Transaction Id Not Found");
+		}
 	}
 }

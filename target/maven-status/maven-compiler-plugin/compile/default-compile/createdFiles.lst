@@ -12,6 +12,7 @@ com\ot\pigmy\repository\CustomerAccountNumberRepository.class
 com\ot\pigmy\exception\InvalidCredentialException.class
 com\ot\pigmy\dto\AgentAadharCardImage$AgentAadharCardImageBuilder.class
 com\ot\pigmy\dto\request\TransactionResp.class
+com\ot\pigmy\dto\request\PrintTransactionDetails.class
 com\ot\pigmy\repository\TransactionRepository.class
 com\ot\pigmy\exception\DuplicateDataEntryException.class
 com\ot\pigmy\dao\AgentDao.class

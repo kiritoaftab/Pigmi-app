@@ -1,8 +1,18 @@
 package com.ot.pigmy.service;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+
 import com.ot.pigmy.dao.AgentDao;
 import com.ot.pigmy.dao.CustomerDao;
-import com.ot.pigmy.dto.Agent;
 import com.ot.pigmy.dto.Customer;
 import com.ot.pigmy.dto.CustomerAccount;
 import com.ot.pigmy.dto.ResponseStructure;
@@ -12,16 +22,6 @@ import com.ot.pigmy.exception.DuplicateDataEntryException;
 import com.ot.pigmy.exception.IdNotFoundException;
 import com.ot.pigmy.repository.CustomerAccountNumberRepository;
 import com.ot.pigmy.util.EmailSender;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
-
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
 
 @Service
 public class CustomerService {
@@ -30,6 +30,7 @@ public class CustomerService {
 
 	@Autowired
 	private CustomerAccountNumberRepository customerAccountNumberRepository;
+	
 	@Autowired
 	private EmailSender emailSender;
 
@@ -179,6 +180,33 @@ public class CustomerService {
 			return new ResponseEntity<>(responseStructure, HttpStatus.OK);
 		} else {
 			throw new DataNotFoundException("Customers Data Not Present");
+		}
+	}
+	public ResponseEntity<ResponseStructure<String>> deleteCustomerById(String id) {
+		ResponseStructure<String> responseStructure = new ResponseStructure<>();
+		Customer customer = customerDao.findCustomerById(id);
+		if (customer != null) {
+			customerDao.deleteCustomer(customer);
+			responseStructure.setStatus(HttpStatus.OK.value());
+			responseStructure.setMessage("Customer Of Id " + id + " Data Deleted");
+			responseStructure.setData("Customer Data Deleted Successfully");
+			return new ResponseEntity<>(responseStructure, HttpStatus.OK);
+		} else {
+			throw new IdNotFoundException("Customer Id " + id + " Not Found");
+		}
+
+	}
+
+	public ResponseEntity<ResponseStructure<Customer>> updateCustomer(Customer customer) {
+		ResponseStructure<Customer> responseStructure = new ResponseStructure<>();
+		Customer admin1 = customerDao.findCustomerById(customer.getId());
+		if (admin1 != null) {
+			responseStructure.setStatus(HttpStatus.OK.value());
+			responseStructure.setMessage("Customer Updated Successfully");
+			responseStructure.setData(customerDao.saveCustomer(customer));
+			return new ResponseEntity<>(responseStructure, HttpStatus.OK);
+		} else {
+			throw new IdNotFoundException("Customer Id " + customer.getId() + ", Not Found");
 		}
 	}
 }

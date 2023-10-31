@@ -2,16 +2,17 @@ package com.ot.pigmy.controller;
 
 import java.util.List;
 
-import com.ot.pigmy.dto.Agent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -90,6 +91,23 @@ public class CustomerController {
 	public ResponseEntity<ResponseStructure<Page<Customer>>> getCustomersWithPaginationAndSort(@PathVariable int offset,
 																						 @PathVariable int pageSize, @PathVariable String field) {
 		return customerService.getCustomersWithPaginationAndSorting(offset, pageSize, field);
+	}
+
+	@ApiOperation(value = "Delete Customer Object", notes = "Input Is Id Of The Customer Object And Output Is String")
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Successfully Deleted"),
+			@ApiResponse(code = 404, message = "Not Found") })
+	@DeleteMapping(value = "/deleteCustomer/{id}", produces = { MediaType.APPLICATION_JSON_VALUE })
+	public ResponseEntity<ResponseStructure<String>> deleteCustomerById(@PathVariable String id) {
+		return customerService.deleteCustomerById(id);
+	}
+
+	@ApiOperation(value = "Update Customer Object", notes = "Input Is Customer Object And Return Updated Customer Object With Id")
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Success"),
+			@ApiResponse(code = 404, message = "Not Found") })
+	@PutMapping(value = "/updateCustomer", consumes = { MediaType.APPLICATION_JSON_VALUE }, produces = {
+			MediaType.APPLICATION_JSON_VALUE })
+	public ResponseEntity<ResponseStructure<Customer>> updateAgent(@RequestBody @Validated Customer customer) {
+		return customerService.updateCustomer(customer);
 	}
 
 }

@@ -12,6 +12,7 @@ C:\Users\DELL\Desktop\Pigmy\pigmy\src\main\java\com\ot\pigmy\controller\Transact
 C:\Users\DELL\Desktop\Pigmy\pigmy\src\main\java\com\ot\pigmy\dto\request\AccountCustomerMap.java
 C:\Users\DELL\Desktop\Pigmy\pigmy\src\main\java\com\ot\pigmy\exception\PhoneNumberNotFoundException.java
 C:\Users\DELL\Desktop\Pigmy\pigmy\src\main\java\com\ot\pigmy\dto\AgentAadharCardImage.java
+C:\Users\DELL\Desktop\Pigmy\pigmy\src\main\java\com\ot\pigmy\dto\request\PrintTransactionDetails.java
 C:\Users\DELL\Desktop\Pigmy\pigmy\src\main\java\com\ot\pigmy\exception\DuplicateDataEntryException.java
 C:\Users\DELL\Desktop\Pigmy\pigmy\src\main\java\com\ot\pigmy\dto\request\TransactionResp.java
 C:\Users\DELL\Desktop\Pigmy\pigmy\src\main\java\com\ot\pigmy\controller\AgentPasswordResetController.java

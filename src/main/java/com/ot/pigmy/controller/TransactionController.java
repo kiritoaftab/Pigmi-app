@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ot.pigmy.dto.ResponseStructure;
 import com.ot.pigmy.dto.Transaction;
+import com.ot.pigmy.dto.request.PrintTransactionDetails;
 import com.ot.pigmy.dto.request.TransactionResp;
 import com.ot.pigmy.service.TransactionService;
 
@@ -64,5 +65,12 @@ public class TransactionController {
 	public ResponseEntity<ResponseStructure<List<Transaction>>> findByTransactionDate(
 			@RequestParam LocalDate localDate) {
 		return transactionService.findByTransactionDate(localDate);
+	}
+
+	@ApiOperation(value = "Fetch Transaction By Id", notes = "Input is Long Id")
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "SUCCESS") })
+	@GetMapping(value = "/findByTransactionId/{id}", produces = { MediaType.APPLICATION_JSON_VALUE })
+	public ResponseEntity<ResponseStructure<PrintTransactionDetails>> findByTransactionId(@PathVariable long id) {
+		return transactionService.findByTransactionId(id);
 	}
 }
