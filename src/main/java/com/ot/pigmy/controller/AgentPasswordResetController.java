@@ -18,7 +18,7 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 
 @RestController
-@RequestMapping("/password")
+@RequestMapping("/agent/password")
 @CrossOrigin(origins = "*")
 public class AgentPasswordResetController {
 

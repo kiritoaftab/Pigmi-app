@@ -1,6 +1,7 @@
 com\ot\pigmy\dto\AgentProfileImage$AgentProfileImageBuilder.class
 com\ot\pigmy\dto\AgentIdGenerator.class
 com\ot\pigmy\dto\CustomerAadharImage$CustomerAadharImageBuilder.class
+com\ot\pigmy\controller\AdminPasswordResetController.class
 com\ot\pigmy\dto\CustomerIdGenerator.class
 com\ot\pigmy\exception\IdNotFoundException.class
 com\ot\pigmy\service\CustomerService.class
@@ -20,7 +21,6 @@ com\ot\pigmy\dto\ResponseStructure.class
 com\ot\pigmy\dao\CustomerAccountDao.class
 com\ot\pigmy\util\ImageUtils.class
 com\ot\pigmy\util\EmailSender.class
-com\ot\pigmy\controller\PasswordResetController.class
 com\ot\pigmy\dao\TransactionDao.class
 com\ot\pigmy\dto\AdminIdGenerator.class
 com\ot\pigmy\dto\AgentAadharCardImage.class
@@ -49,4 +49,5 @@ com\ot\pigmy\controller\AgentController.class
 com\ot\pigmy\dto\request\AddAccount.class
 com\ot\pigmy\exception\EmailIdNotFoundException.class
 com\ot\pigmy\service\AdminService.class
+com\ot\pigmy\controller\AgentPasswordResetController.class
 com\ot\pigmy\service\TransactionService.class
