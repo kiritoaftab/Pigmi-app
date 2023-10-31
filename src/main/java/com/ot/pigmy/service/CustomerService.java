@@ -1,8 +1,10 @@
 package com.ot.pigmy.service;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +32,7 @@ public class CustomerService {
 
 	@Autowired
 	private CustomerAccountNumberRepository customerAccountNumberRepository;
-	
+
 	@Autowired
 	private EmailSender emailSender;
 
@@ -168,8 +170,8 @@ public class CustomerService {
 		}
 	}
 
-	public ResponseEntity<ResponseStructure<Page<Customer>>> getCustomersWithPaginationAndSorting(int offset, int pageSize,
-																							String field) {
+	public ResponseEntity<ResponseStructure<Page<Customer>>> getCustomersWithPaginationAndSorting(int offset,
+			int pageSize, String field) {
 		ResponseStructure<Page<Customer>> responseStructure = new ResponseStructure<>();
 		Page<Customer> page = customerDao.findCustomersWithPaginationAndSorting(offset, pageSize, field);
 		if (page.getSize() > 0) {
@@ -182,6 +184,7 @@ public class CustomerService {
 			throw new DataNotFoundException("Customers Data Not Present");
 		}
 	}
+
 	public ResponseEntity<ResponseStructure<String>> deleteCustomerById(String id) {
 		ResponseStructure<String> responseStructure = new ResponseStructure<>();
 		Customer customer = customerDao.findCustomerById(id);
@@ -208,5 +211,39 @@ public class CustomerService {
 		} else {
 			throw new IdNotFoundException("Customer Id " + customer.getId() + ", Not Found");
 		}
+	}
+
+	public ResponseEntity<String> withDrawalOfAmount(String id, String accountType, double withdrawAmount) {
+		Customer customer = customerDao.findCustomerById(id);
+		if (customer != null) {
+			Optional<CustomerAccount> customerAccount = customerAccountNumberRepository
+					.findByCustomerIdAndAccountType(id, accountType);
+			if (customerAccount.isPresent()) {
+				double remBalance = customerAccount.get().getBalance();
+				LocalDate joiningDate = customer.getJoiningTime();
+				LocalDate today = LocalDate.now();
+
+				long daysSinceJoining = ChronoUnit.DAYS.between(joiningDate, today);
+
+				if (daysSinceJoining >= 180) {
+					if (withdrawAmount <= remBalance) {
+						double amount = remBalance - withdrawAmount;
+						CustomerAccount customerAccount1 = new CustomerAccount();
+						customerAccount1.setBalance(amount);
+						customerAccountNumberRepository.save(customerAccount1);
+						return ResponseEntity.ok("Customer has been active for at least 180 days.");
+					} else {
+						return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Amount Entered is Invalid");
+					}
+				} else {
+					return ResponseEntity.ok("Customer is not active for 180 days yet.");
+				}
+			} else {
+				return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Customer Account not found");
+			}
+		} else {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Customer not found");
+		}
+
 	}
 }

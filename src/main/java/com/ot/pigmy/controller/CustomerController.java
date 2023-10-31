@@ -89,7 +89,7 @@ public class CustomerController {
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Fetched All The Customers Object") })
 	@GetMapping(value = "/getAllCustomers/{offset}/{pageSize}/{field}", produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<ResponseStructure<Page<Customer>>> getCustomersWithPaginationAndSort(@PathVariable int offset,
-																						 @PathVariable int pageSize, @PathVariable String field) {
+			@PathVariable int pageSize, @PathVariable String field) {
 		return customerService.getCustomersWithPaginationAndSorting(offset, pageSize, field);
 	}
 
@@ -108,6 +108,15 @@ public class CustomerController {
 			MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<ResponseStructure<Customer>> updateAgent(@RequestBody @Validated Customer customer) {
 		return customerService.updateCustomer(customer);
+	}
+
+	@ApiOperation(value = "With Drawal Of Amount ", notes = "Input Is id, accountNumber, withdrawAmount")
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Success"),
+			@ApiResponse(code = 404, message = "Not Found") })
+	@PutMapping(value = "/withDrawalOfAmount", consumes = { MediaType.ALL_VALUE }, produces = { MediaType.ALL_VALUE })
+	public ResponseEntity<String> withDrawalOfAmount(@RequestParam String id, @RequestParam String accountType,
+			@RequestParam double withdrawAmount) {
+		return customerService.withDrawalOfAmount(id, accountType, withdrawAmount);
 	}
 
 }
