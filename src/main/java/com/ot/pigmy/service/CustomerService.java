@@ -2,6 +2,7 @@ package com.ot.pigmy.service;
 
 import com.ot.pigmy.dao.AgentDao;
 import com.ot.pigmy.dao.CustomerDao;
+import com.ot.pigmy.dto.Agent;
 import com.ot.pigmy.dto.Customer;
 import com.ot.pigmy.dto.CustomerAccount;
 import com.ot.pigmy.dto.ResponseStructure;
@@ -12,6 +13,7 @@ import com.ot.pigmy.exception.IdNotFoundException;
 import com.ot.pigmy.repository.CustomerAccountNumberRepository;
 import com.ot.pigmy.util.EmailSender;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -162,6 +164,21 @@ public class CustomerService {
 			return new ResponseEntity<>(responseStructure, HttpStatus.OK);
 		} else {
 			throw new IdNotFoundException("No match for " + query + ", NOT FOUND");
+		}
+	}
+
+	public ResponseEntity<ResponseStructure<Page<Customer>>> getCustomersWithPaginationAndSorting(int offset, int pageSize,
+																							String field) {
+		ResponseStructure<Page<Customer>> responseStructure = new ResponseStructure<>();
+		Page<Customer> page = customerDao.findCustomersWithPaginationAndSorting(offset, pageSize, field);
+		if (page.getSize() > 0) {
+			responseStructure.setStatus(HttpStatus.OK.value());
+			responseStructure.setMessage("All Details of Customers Fetched");
+			responseStructure.setRecordCount(page.getSize());
+			responseStructure.setData(page);
+			return new ResponseEntity<>(responseStructure, HttpStatus.OK);
+		} else {
+			throw new DataNotFoundException("Customers Data Not Present");
 		}
 	}
 }

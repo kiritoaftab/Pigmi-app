@@ -2,7 +2,9 @@ package com.ot.pigmy.controller;
 
 import java.util.List;
 
+import com.ot.pigmy.dto.Agent;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -81,4 +83,13 @@ public class CustomerController {
 			@RequestParam String query) {
 		return customerService.findAgendIdAndCustomerName(agentId, query);
 	}
+
+	@ApiOperation(value = "Fetch All Customers With Pagination And Sort", notes = "Return The List Of Customers With Pagination And Sort")
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Fetched All The Customers Object") })
+	@GetMapping(value = "/getAllCustomers/{offset}/{pageSize}/{field}", produces = { MediaType.APPLICATION_JSON_VALUE })
+	public ResponseEntity<ResponseStructure<Page<Customer>>> getCustomersWithPaginationAndSort(@PathVariable int offset,
+																						 @PathVariable int pageSize, @PathVariable String field) {
+		return customerService.getCustomersWithPaginationAndSorting(offset, pageSize, field);
+	}
+
 }
