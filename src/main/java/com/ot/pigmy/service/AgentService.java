@@ -63,6 +63,7 @@ public class AgentService {
 		ResponseStructure<Agent> responseStructure = new ResponseStructure<>();
 		Agent agent = agentDao.getAgentById(id);
 		if (agent != null) {
+			Encryption.decrypt(agent.getPassword());
 			responseStructure.setStatus(HttpStatus.OK.value());
 			responseStructure.setMessage("Fetched Agent Details By Id");
 			responseStructure.setData(agent);
