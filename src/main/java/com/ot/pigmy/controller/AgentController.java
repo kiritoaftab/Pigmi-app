@@ -128,16 +128,16 @@ public class AgentController {
 	@ApiOperation(value = "Change Agent Profile Status To Online", notes = "Inputs are Agent-Id and return String Status Changed")
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Success"),
 			@ApiResponse(code = 404, message = "Not Found") })
-	@PatchMapping(value = "/online", produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<ResponseStructure<Object>> changeAgentProfileStatusToOnline(@RequestParam String agentId) {
+	@PatchMapping(value = "/online/{agentId}", produces = { MediaType.APPLICATION_JSON_VALUE })
+	public ResponseEntity<ResponseStructure<Object>> changeAgentProfileStatusToOnline(@PathVariable String agentId) {
 		return agentService.changeAgentProfileStatusToOnline(agentId);
 	}
 
 	@ApiOperation(value = "Change Agent Profile Status To Offline", notes = "Inputs are Agent-Id and return String Status Changed")
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Success"),
 			@ApiResponse(code = 404, message = "Not Found") })
-	@PatchMapping(value = "/offline", produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<ResponseStructure<Object>> changeAgentProfileStatusToOffline(@RequestParam String agentId) {
+	@PatchMapping(value = "/offline/{agentId}", produces = { MediaType.APPLICATION_JSON_VALUE })
+	public ResponseEntity<ResponseStructure<Object>> changeAgentProfileStatusToOffline(@PathVariable String agentId) {
 		return agentService.changeAgentProfileStatusToOffline(agentId);
 	}
 
