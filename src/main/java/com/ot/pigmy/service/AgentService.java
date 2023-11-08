@@ -1,6 +1,7 @@
 package com.ot.pigmy.service;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -445,34 +446,60 @@ public class AgentService {
 		}
 	}
 
-	public ResponseEntity<ResponseStructure<Agent>> getAgentByIdOrAgentByName(String input) {
-		ResponseStructure<Agent> responseStructure = new ResponseStructure<>();
-		if (input.matches(".*-(\\d+)")) {
-			Agent agent = agentDao.getAgentById(input);
-			if (agent != null) {
-				responseStructure.setStatus(HttpStatus.OK.value());
-				responseStructure.setMessage("Fetched Agent Details By Id");
-				responseStructure.setData(agent);
-				return new ResponseEntity<>(responseStructure, HttpStatus.OK);
-			} else {
-				throw new IdNotFoundException("Agent ID " + input + ", NOT FOUND");
-			}
-		} else {
+//	public ResponseEntity<ResponseStructure<Agent>> getAgentByIdOrAgentByName(String input) {
+//		ResponseStructure<Agent> responseStructure = new ResponseStructure<>();
+//		if (input.matches(".*-(\\d+)")) {
+//			Agent agent = agentDao.getAgentById(input);
+//			if (agent != null) {
+//				responseStructure.setStatus(HttpStatus.OK.value());
+//				responseStructure.setMessage("Fetched Agent Details By Id");
+//				responseStructure.setData(agent);
+//				return new ResponseEntity<>(responseStructure, HttpStatus.OK);
+//			} else {
+//				throw new IdNotFoundException("Agent ID " + input + ", NOT FOUND");
+//			}
+//		} else {
+//
+//			List<Agent> agents = agentDao.getAgentByName(input);
+//			for (Agent agent : agents) {
+//				if (agent.getAgentName().equalsIgnoreCase(input) && agents.size() > 0) {
+//					responseStructure.setStatus(HttpStatus.OK.value());
+//					responseStructure.setMessage("Fetched Agent By Name");
+//					responseStructure.setData(agent);
+//					return new ResponseEntity<>(responseStructure, HttpStatus.OK);
+//				} else {
+//					throw new DataNotFoundException("Agent Data Not Present");
+//				}
+//			}
+//			return null;
+//		}
+//	}
 
-			List<Agent> agents = agentDao.getAgentByName(input);
-			for (Agent agent : agents) {
-				if (agent.getAgentName().equalsIgnoreCase(input) && agents.size() > 0) {
-					responseStructure.setStatus(HttpStatus.OK.value());
-					responseStructure.setMessage("Fetched Agent By Name");
-					responseStructure.setData(agent);
-					return new ResponseEntity<>(responseStructure, HttpStatus.OK);
-				} else {
-					throw new DataNotFoundException("Agent Data Not Present");
-				}
+
+	public ResponseEntity<ResponseStructure<List<Agent>>> searchQuery(String query) {
+
+		ResponseStructure<List<Agent>> responseStructure = new ResponseStructure<>();
+		List<Agent> agentList = new ArrayList<>();
+		if (query.matches(".*\\d.*")) {
+			Agent agent = agentDao.getAgentById(query);
+			if (agent == null) {
+				throw new IdNotFoundException("Agent id " + query + " not found");
 			}
-			return null;
+			agentList.add(agent);
+		} else {
+			agentList = agentDao.fetchAgentByQuery(query);
+		}
+		if (agentList.size() > 0) {
+			responseStructure.setStatus(HttpStatus.OK.value());
+			responseStructure.setMessage("Fetched Agents Details By query");
+			responseStructure.setData(agentList);
+			return new ResponseEntity<>(responseStructure, HttpStatus.OK);
+		} else {
+			throw new IdNotFoundException("No match for " + query + ", NOT FOUND");
 		}
 	}
+
+
 
 	public ResponseEntity<ResponseStructure<List<Customer>>> getCustomersByAgentId(String agentId) {
 		ResponseStructure<List<Customer>> responseStructure = new ResponseStructure<>();

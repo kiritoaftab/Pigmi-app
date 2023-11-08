@@ -198,11 +198,10 @@ public class AgentController {
 	@ApiOperation(value = "Fetch Agent By Id Or Name", notes = "Input is Agent Id Or Agent Name")
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Success"),
 			@ApiResponse(code = 404, message = "Not Found") })
-	@GetMapping(value = "/getAgentByIdOrAgentByName", produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<?> getAgentByIdOrAgentByName(@RequestParam String agentId) {
-		return agentService.getAgentByIdOrAgentByName(agentId);
+	@GetMapping(value = "/getAgentByIdOrAgentByName/{query}", produces = { MediaType.APPLICATION_JSON_VALUE })
+	public ResponseEntity<ResponseStructure<List<Agent>>> getAgentByIdOrAgentByName(@PathVariable String query) {
+		return agentService.searchQuery(query);
 	}
-
 
 	@ApiOperation(value = "Fetch Customers for Agent ", notes = "Input is Agent Id")
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Success"),

@@ -3,6 +3,7 @@ package com.ot.pigmy.dao;
 import java.util.List;
 import java.util.Optional;
 
+import com.ot.pigmy.dto.Customer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -63,5 +64,9 @@ public class AgentDao {
 	public Agent getUserByUuid(String uuid) {
 		Optional<Agent> agent = agentRepository.findByUuid(uuid);
 		return agent.orElse(null);
+	}
+
+	public List<Agent> fetchAgentByQuery(String query) {
+		return agentRepository.findByAgentNameContaining(query);
 	}
 }
