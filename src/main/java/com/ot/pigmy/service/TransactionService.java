@@ -1,9 +1,16 @@
 package com.ot.pigmy.service;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -175,4 +182,69 @@ public class TransactionService {
 			throw new IdNotFoundException("Transaction Id Not Found");
 		}
 	}
+
+	public void generateTransactionExcel(HttpServletResponse response, LocalDate localDate) {
+		List<Transaction> list = transactionDao.findByTransactionDate(localDate);
+
+		HSSFWorkbook workbook = new HSSFWorkbook();
+		HSSFSheet sheet = workbook.createSheet("Transaction's Info");
+		HSSFRow row = sheet.createRow(0);
+
+		row.createCell(0).setCellValue("BRANCH ID");
+		row.createCell(1).setCellValue("AGENT CODE");
+		row.createCell(2).setCellValue("ACCOUNT TYPE");
+		row.createCell(3).setCellValue("ACCOUNT CODE");
+		row.createCell(4).setCellValue("ACCOUNTNO");
+		row.createCell(5).setCellValue("CUSTOMER ID");
+		row.createCell(6).setCellValue("ACCOUNT NAME");
+		row.createCell(7).setCellValue("LANDMARK");
+		row.createCell(8).setCellValue("AGREED AMOUNT");
+		row.createCell(9).setCellValue("BALANCE AMOUNT");
+		row.createCell(10).setCellValue("OPEN DATE");
+		row.createCell(11).setCellValue("LAST COLLECTION DATE");
+		row.createCell(12).setCellValue("LEAN ACCOUNT");
+		row.createCell(13).setCellValue("LEAN OPENDATE");
+		row.createCell(14).setCellValue("LEAN AMOUNT");
+		row.createCell(15).setCellValue("LEAN BALANCE");
+		row.createCell(16).setCellValue("COLLECTION AMOUNT");
+		row.createCell(17).setCellValue("COLLECTION DATETIME");
+
+		int dataRowIndex = 1;
+
+		for (Transaction transac : list) {
+			Customer customer = customerDao.findCustomerById(transac.getCustomerId());
+			Optional<CustomerAccount> customerAccount = customerAccountNumberRepository
+					.findByAccountNumber(transac.getAccountNumber());
+			HSSFRow dataRow = sheet.createRow(dataRowIndex);
+			dataRow.createCell(0).setCellValue(1);
+			dataRow.createCell(1).setCellValue(transac.getAgentId());
+			dataRow.createCell(2).setCellValue(transac.getAccountType());
+			dataRow.createCell(3).setCellValue(transac.getAccountCode());
+			dataRow.createCell(4).setCellValue(transac.getAccountNumber());
+			dataRow.createCell(5).setCellValue(transac.getCustomerId());
+			dataRow.createCell(6).setCellValue(customer.getCustomerName());
+			dataRow.createCell(7).setCellValue(customer.getAddress());
+			dataRow.createCell(8).setCellValue(transac.getAmount());
+			dataRow.createCell(9).setCellValue(customerAccount.get().getBalance());
+			dataRow.createCell(10).setCellValue(customer.getJoiningTime());
+			dataRow.createCell(11).setCellValue(transac.getTransactionDate());
+			dataRow.createCell(12).setCellValue("");
+			dataRow.createCell(13).setCellValue("");
+			dataRow.createCell(14).setCellValue("");
+			dataRow.createCell(15).setCellValue("");
+			dataRow.createCell(16).setCellValue("");
+			dataRow.createCell(17).setCellValue("");
+			dataRowIndex++;
+		}
+		try {
+
+			ServletOutputStream ops = response.getOutputStream();
+			workbook.write(ops);
+			workbook.close();
+			ops.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
 }

@@ -38,7 +38,7 @@ public class Transaction {
 
 	@NotNull(message = "Please Enter The amount")
 	@ApiModelProperty(required = true)
-	private int amount;
+	private double amount;
 
 	@NotBlank(message = "Please Enter The Mode")
 	@ApiModelProperty(required = true)
@@ -57,4 +57,8 @@ public class Transaction {
 	@NotBlank(message = "Please Enter The Account Type")
 	@ApiModelProperty(required = true)
 	private String accountType;
+	
+	@NotBlank(message = "Please Enter The Account Code")
+	@ApiModelProperty(required = true)
+	private String accountCode;
 }

@@ -70,6 +70,7 @@ public class Agent {
 	@ApiModelProperty(required = true)
 	private String address;
 
+	@Column(unique = true)
 	@NotNull(message = "Please Enter the Agent-Aadhaar_Number")
 	@Pattern(regexp = "^[0-9]{12}+$", message = "Enter Proper Agent-Aadhaar_Number")
 	@ApiModelProperty(required = true)

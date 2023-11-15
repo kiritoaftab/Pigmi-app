@@ -3,6 +3,8 @@ package com.ot.pigmy.controller;
 import java.time.LocalDate;
 import java.util.List;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
@@ -72,5 +74,14 @@ public class TransactionController {
 	@GetMapping(value = "/findByTransactionId/{id}", produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<ResponseStructure<PrintTransactionDetails>> findByTransactionId(@PathVariable long id) {
 		return transactionService.findByTransactionId(id);
+	}
+
+	@GetMapping("/excel/{localDate}")
+	public void generateExcelReport(HttpServletResponse response, @PathVariable LocalDate localDate) throws Exception {
+		response.setContentType("application/vnd.ms-excel");
+		String headerKey = "Content-Disposition";
+		String headerValue = "attachment;filename=products.xls";
+		response.setHeader(headerKey, headerValue);
+		transactionService.generateTransactionExcel(response, localDate);
 	}
 }

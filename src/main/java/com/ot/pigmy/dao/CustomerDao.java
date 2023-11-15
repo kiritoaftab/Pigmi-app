@@ -78,13 +78,17 @@ public class CustomerDao {
 	public Customer findByCustomerIdAndAgentId(String customerId, String agentId) {
 		return customerRepository.findByIdAndAgentId(customerId, agentId);
 	}
-	
+
 	public void deleteCustomer(Customer customer) {
 		customerRepository.delete(customer);
 	}
-	
+
 	public List<Customer> findByAgentIdAndCustomerName(String agentId, String query) {
 		return customerRepository.findByAgentIdAndCustomerNameContaining(agentId, query);
-	}	
-	
+	}
+
+	public Customer findCustomerByAadhaarNumber(String aadharNumber) {
+		return customerRepository.findCustomerByAadhaarNumber(aadharNumber);
+	}
+
 }

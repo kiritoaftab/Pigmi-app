@@ -104,6 +104,7 @@ public class Customer {
 		this.customerUniqueCode = customerUniqueCode;
 	}
 	
+	@Column(unique = true)
 	@NotNull(message = "Please Enter the Customer-Aadhaar_Number")
 	@Pattern(regexp = "^[0-9]{12}+$", message = "Enter Proper Customer-Aadhaar_Number")
 	@ApiModelProperty(required = true)

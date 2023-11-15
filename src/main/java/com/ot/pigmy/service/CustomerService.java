@@ -44,7 +44,8 @@ public class CustomerService {
 		ResponseStructure<Customer> responseStructure = new ResponseStructure<>();
 
 		if (customerDao.findByCustomerEmail(customer.getEmail()) != null
-				|| customerDao.findByCustomerPhone(customer.getPhone()) != null) {
+				|| customerDao.findByCustomerPhone(customer.getPhone()) != null
+				|| customerDao.findCustomerByAadhaarNumber(customer.getAadhaarNumber()) != null) {
 			throw new DuplicateDataEntryException("Customer Already Exists " + customer.getCustomerName());
 		} else if (agentDao.getAgentById(customer.getAgentId()) == null) {
 			throw new DuplicateDataEntryException("Agent Does not exist" + customer.getAgentId());
@@ -90,7 +91,8 @@ public class CustomerService {
 			customerAccount.setCustomer(customerDao.findCustomerById(request.getCustomerId()));
 			customerAccount.setAccountNumber(request.getAccountNumber());
 			customerAccount.setAccountType(request.getAccountType());
-			customerAccount.setBalance(0);
+			customerAccount.setAccountCode(request.getAccountCode());
+			customerAccount.setBalance(request.getBalance());
 
 			customerAccount = customerAccountNumberRepository.save(customerAccount);
 

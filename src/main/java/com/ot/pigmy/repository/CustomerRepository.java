@@ -23,4 +23,6 @@ public interface CustomerRepository extends JpaRepository<Customer, String> {
 
 	public List<Customer> findByAgentIdAndCustomerNameContaining(String agentId, String query);
 
+	public Customer findCustomerByAadhaarNumber(String aadharNumber);
+
 }

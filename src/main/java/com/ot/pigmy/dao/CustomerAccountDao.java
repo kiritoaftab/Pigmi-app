@@ -18,7 +18,7 @@ public class CustomerAccountDao {
         return  customerAccountNumberRepository.save(customerAccount);
     }
 
-    public CustomerAccount addAmount(int amount, String accountNumber){
+    public CustomerAccount addAmount(double amount, String accountNumber){
         Optional<CustomerAccount> customerAccount = customerAccountNumberRepository.findByAccountNumber(accountNumber);
         if(customerAccount.isPresent()){
             CustomerAccount ca = customerAccount.get();
