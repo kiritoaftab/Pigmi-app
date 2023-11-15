@@ -3,49 +3,12 @@ import {User} from '../../../components'
 import {COLORS, SIZES} from '../../../constants'
 import { useRouter } from 'expo-router';
 
-const Userlist = () => {
+const Userlist = (customerList) => {
 
     const router = useRouter();
 
-    const data = [
-        {
-            "custId":"C101",
-            "name":"Aftab Ahmed",
-        },
-        {
-            "custId":"C102",
-            "name":"Vipul Jujar",
-        },
-        {
-            "custId":"C103",
-            "name":"Saif Badami",
-        },
-        {
-            "custId":"C101",
-            "name":"Aftab Ahmed",
-        },
-        {
-            "custId":"C102",
-            "name":"Vipul Jujar",
-        },
-        {
-            "custId":"C101",
-            "name":"Aftab Ahmed",
-        },
-        {
-            "custId":"C102",
-            "name":"Vipul Jujar",
-        },
-        {
-            "custId":"C101",
-            "name":"Aftab Ahmed",
-        },
-        {
-            "custId":"C102",
-            "name":"Vipul Jujar",
-        },
-    ]
-
+    console.log('i am heree')
+    console.log(customerList.customerList)
     return (
         <ScrollView 
             showsVerticalScrollIndicator={false}
@@ -59,10 +22,11 @@ const Userlist = () => {
             }}
         >
             {
-                data?.map((user,index)=> (
+                customerList?.customerList?.map((user,index)=> (
                     <User
+                        key={index}
                         user={user}
-                        handleNavigate={()=> router.push(`/add_amount/${user?.custId}`) }
+                        handleNavigate={()=> router.push(`/add_amount/${user?.id}`) }
                     />
                 ))
             }

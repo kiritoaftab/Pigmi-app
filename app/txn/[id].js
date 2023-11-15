@@ -1,10 +1,17 @@
 import { Text ,View, SafeAreaView, ScrollView, ActivityIndicator, RefreshControl } from 'react-native'
-import {Stack, useRouter, useGlobalSearchParams} from 'expo-router';
+import {Stack, useRouter, useGlobalSearchParams, router} from 'expo-router';
 
 import { COLORS, FONT, icons, images, SIZES } from "../../constants";
 import {TopMoneybanner,AddMoney, ScreenHeaderBtn, TopTxnBanner,TxnDetails} from "../../components";
 
+import useTransaction from '../../hook/useTransaction';
+
 const Transaction = () => {
+    const params = useGlobalSearchParams();
+    console.log(params);
+
+    const { data, isLoading, error, refetch } = useTransaction(params.id);
+    console.log(data);
     const user ={
         name:"Aftab Ahmed",
         customerId: "C101",
@@ -12,7 +19,7 @@ const Transaction = () => {
     }
 
     const txn ={
-        txnId:"TXN101",
+        txnId:params.id,
         agentName:"Vinod Khanna",
         amount: 100,
         date: "23-10-2023",
@@ -20,6 +27,11 @@ const Transaction = () => {
     }
 
     return(
+        isLoading? (
+            <ActivityIndicator size={SIZES.large} color={COLORS.primary}/>
+        ) : error ? (
+            alert('There is error')
+        ) :
         <SafeAreaView
             style={{flex:1,  backgroundColor:COLORS.lightGreen, alignItems:"center"}}
        >

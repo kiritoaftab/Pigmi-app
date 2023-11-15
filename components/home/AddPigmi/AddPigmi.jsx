@@ -3,8 +3,8 @@ import { View, Text, Image, TouchableOpacity } from "react-native";
 import styles from "./addpigmi.style";
 import { COLORS, icons, images, SIZES } from "../../../constants";
 
-const AddPigmi = ({handleClick}) => {
-
+const AddPigmi = ({agent,handleClick}) => {
+    
     return(
         <View style={styles.container}>
             <TouchableOpacity style={styles.innerContainer} onPress={handleClick}>

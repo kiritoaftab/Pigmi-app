@@ -16,6 +16,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -54,9 +55,10 @@ public class Customer {
 
 	@NotBlank(message = "Please Enter The Customer-Gender")
 	@ApiModelProperty(required = true)
-	private String gender;
+	private String gender; 
 
 	@ApiModelProperty(required = true)
+	@CreationTimestamp
 	private LocalDate joiningTime;
 
 	@UpdateTimestamp

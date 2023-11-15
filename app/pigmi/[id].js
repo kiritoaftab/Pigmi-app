@@ -1,15 +1,26 @@
-import { View, Text, ScrollView, SafeAreaView } from "react-native";
+import { View, Text, ScrollView, SafeAreaView, ActivityIndicator } from "react-native";
 import { useState } from "react";
-import { Stack, useRouter } from "expo-router";
+import { Stack, useRouter, useGlobalSearchParams } from "expo-router";
 
-import { COLORS, FONT, icons, images, SIZES } from "../constants";
+import { COLORS, FONT, icons, images, SIZES } from "../../constants";
 
-import {Topbanner, AddCustomer,ScreenHeaderBtn, AddPigmi, Searchbanner, Userlist} from '../components'
+import {Topbanner, AddCustomer,ScreenHeaderBtn, AddPigmi, Searchbanner, Userlist} from '../../components'
+
+import useCustomerList from "../../hook/useCustomerList";
 
 const pigmi = () => {
     const router = useRouter();
+    const params = useGlobalSearchParams();
+    console.log(params);
 
+    const { data, isLoading, error, refetch } = useCustomerList(params.id);
+    
     return (
+        isLoading ? (
+            <ActivityIndicator size={SIZES.large} color={COLORS.primary}/>
+        ) : error ? (
+            <Text>{error}</Text>
+        ) :
         <SafeAreaView style={{
             flex:1,
             backgroundColor:COLORS.lightBlue,
@@ -37,7 +48,9 @@ const pigmi = () => {
             />
 
                 <Searchbanner/>
-                <Userlist/>
+                <Userlist  
+                    customerList={data}
+                />
         </SafeAreaView>
     )
 }

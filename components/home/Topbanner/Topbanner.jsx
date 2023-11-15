@@ -3,7 +3,8 @@ import styles from "./topbanner.style";
 import { COLORS, icons, images, SIZES } from "../../../constants";
 import { useState } from "react";
 
-const Topbanner = () => {
+const Topbanner = (agent) => {
+    console.log(agent)
     const [searchTerm, setSearchTerm] = useState(null)
   return (
     <View style={styles.container}>
@@ -26,9 +27,9 @@ const Topbanner = () => {
                 
                 <View style={styles.middleTextWrapper}>
                     <Text style={styles.helloText}>Hello Agent ,</Text>
-                    <Text style={styles.nameText}>Aftab Ahmed </Text>
+                    <Text style={styles.nameText}>{agent?.agent?.agentName} </Text>
                 </View>
-                <Text style={styles.agentText}>Agent Id : AG101</Text>
+                <Text style={styles.agentText}>Agent Id : {agent?.agent?.id}</Text>
             </View>
     </View>
   );

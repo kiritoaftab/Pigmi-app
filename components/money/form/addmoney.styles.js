@@ -56,7 +56,7 @@ const styles = StyleSheet.create({
     topRow:{
         flex:1,
         flexDirection:"row",
-        justifyContent:"space-around"
+        justifyContent:"flex-start"
     },
     dateHeading:{
         fontFamily:FONT.extraBold,
@@ -81,12 +81,13 @@ const styles = StyleSheet.create({
         padding:SIZES.small,
     },
     balance:{
-        fontFamily:FONT.medium,
+        fontFamily:FONT.bold,
+
     },
     amtWrapper:{
         flex:1,
-        marginTop:SIZES.xLarge,
-        padding:SIZES.small,
+        
+        
     },
     amountWrapper:{
         width:"90%",
@@ -99,6 +100,7 @@ const styles = StyleSheet.create({
         fontFamily:FONT.semiBold,
     },
     payWrapper:{
+        marginTop:SIZES.large,
         padding:SIZES.medium,
         flex:1,
         flexDirection:"row",
@@ -159,6 +161,21 @@ const styles = StyleSheet.create({
     paymentButton:{
         color:COLORS.white,
         fontFamily:FONT.semiBold
+    },
+    accountNumberWrap:{
+        
+        marginTop:SIZES.medium,
+        marginBottom:SIZES.medium,
+    },
+    accNumHead:{
+        fontFamily:FONT.extraBold,
+        marginTop:SIZES.small,
+    },
+    accountNumber:{
+        fontFamily:FONT.regular,
+    },
+    accountType:{
+        fontFamily:FONT.regular,
     }
 
 

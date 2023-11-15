@@ -1,58 +1,49 @@
-import { View, Text, ScrollView, SafeAreaView, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  ScrollView,
+  SafeAreaView,
+  TouchableOpacity,
+  TextInput
+} from "react-native";
+
 import { useState } from "react";
 import { Stack, useRouter } from "expo-router";
 
 import { COLORS, icons, images, SIZES } from "../constants";
 
-import {Topbanner, AddCustomer, AddPigmi} from '../components'
+import { Topbanner, AddCustomer, AddPigmi, TopTxnBanner , LoginForm } from "../components";
 
+const [isLoading,setIsLoading] = useState(false);
 
-const Start = () => {
-    const router = useRouter();
+const Home = () => {
+  return (
+    <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.gray2 }}>
+      <Stack.Screen
+        options={{
+          headerStyle: { backgroundColor: COLORS.green },
+          headerShadowVisible: false,
+          headerTitle: "",
+          
+        }}
+      />
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <View
+          style={{
+            flex: 1,
+            padding: SIZES.medium,
+            backgroundColor: COLORS.green,
 
-    return (
-        <SafeAreaView style={{flex:1, backgroundColor:COLORS.gray2}}>
-            <Stack.Screen
-                options={{
-                    headerStyle : {backgroundColor:COLORS.green},
-                    headerShadowVisible:false,
-                    headerTitle:''
-                }}
-            />
-            <ScrollView 
-                showsVerticalScrollIndicator={false}
-            >
-                <View style={{
-                    flex:1,
-                    padding:SIZES.medium,
-                    backgroundColor:COLORS.green,
-                    
-                    borderBottomLeftRadius:30,
-                    borderBottomRightRadius:30,   
-                }}> 
-                    <Topbanner/>
-                    
-                </View>
-                <View style={{
-                    marginTop:-36,
-                    backgroundColor:COLORS.lightWhite,
-                    width:"80%",
-                    alignItems:"center",
-                    alignSelf:"center",
-                    height:"69%",
-                    borderRadius:30,
-                }}>
-                    <TouchableOpacity onPress={() => router.push('/home')}>
-                        <Text>Testing</Text>
-                    </TouchableOpacity>
-                    <AddPigmi 
-                        handleClick={()=> router.push('/pigmi')}
-                    />
-                </View>
-                
-            </ScrollView>
-        </SafeAreaView>
-    )
-}
+            borderBottomLeftRadius: 30,
+            borderBottomRightRadius: 30,
+          }}
+        >
+          <TopTxnBanner />
+        </View>
+            <LoginForm/>
+      </ScrollView>
+    </SafeAreaView>
+  );
+};
 
-export default Start;
+export default Home;

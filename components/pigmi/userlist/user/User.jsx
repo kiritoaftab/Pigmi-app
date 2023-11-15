@@ -17,8 +17,8 @@ const User = ({user, handleNavigate}) => {
                 />
             </View>
             <View style={styles.textWrapper}>
-                <Text style={styles.name}>{user.name}</Text>
-                <Text style={styles.custId}>Customer Id: {user.custId}</Text>
+                <Text style={styles.name}>{user.customerName}</Text>
+                <Text style={styles.custId}>Customer Id: {user.id}</Text>
             </View>
         </TouchableOpacity>
     )
