@@ -18,4 +18,6 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
 	public Optional<List<Transaction>> findByAgentId(String query);
 
 	public Optional<List<Transaction>> findByTransactionDate(LocalDate localDate);
+
+	public Optional<List<Transaction>> findByAgentIdAndTransactionDate(String agentId,LocalDate localDate);
 }

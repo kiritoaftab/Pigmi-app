@@ -55,4 +55,9 @@ public class TransactionDao {
 		return transactions.orElse(null);
 	}
 
+	public List<Transaction> findByAgentIdAndTransactionDate(String agentId,LocalDate localDate){
+		Optional<List<Transaction>> transactions = transactionRepository.findByAgentIdAndTransactionDate(agentId,localDate);
+	    return  transactions.orElse(null);
+	}
+
 }

@@ -76,12 +76,17 @@ public class TransactionController {
 		return transactionService.findByTransactionId(id);
 	}
 
-	@GetMapping("/excel/{localDate}")
-	public void generateExcelReport(HttpServletResponse response, @PathVariable LocalDate localDate) throws Exception {
-		response.setContentType("application/vnd.ms-excel");
-		String headerKey = "Content-Disposition";
-		String headerValue = "attachment;filename=products.xls";
-		response.setHeader(headerKey, headerValue);
-		transactionService.generateTransactionExcel(response, localDate);
+//	@GetMapping("/excel/{localDate}")
+//	public void generateExcelReport(HttpServletResponse response, @PathVariable LocalDate localDate) throws Exception {
+//		response.setContentType("application/vnd.ms-excel");
+//		String headerKey = "Content-Disposition";
+//		String headerValue = "attachment;filename = transaction.xls";
+//		response.setHeader(headerKey, headerValue);
+//		transactionService.generateTransactionExcel(response, localDate);
+//	}
+	
+	@GetMapping("/csv/{agentId}/{localDate}")
+	public void generateCSVReport(HttpServletResponse response,@PathVariable String agentId, @PathVariable LocalDate localDate) {
+		transactionService.generateTransactionCSV(response, agentId ,localDate);
 	}
 }
