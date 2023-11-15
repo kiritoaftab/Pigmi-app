@@ -10,9 +10,7 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
@@ -71,7 +69,6 @@ public class Customer {
 
 	@Column(unique = true)
 	@Pattern(regexp = "^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$", message = "Enter a Valid Customer-Email")
-	@ApiModelProperty(required = true)
 	private String email;
 
 	@NotBlank(message = "Please Enter The Address")
@@ -106,22 +103,15 @@ public class Customer {
 	public void setCustomerUniqueCode(String customerUniqueCode) {
 		this.customerUniqueCode = customerUniqueCode;
 	}
+	
+	@NotNull(message = "Please Enter the Customer-Aadhaar_Number")
+	@Pattern(regexp = "^[0-9]{12}+$", message = "Enter Proper Customer-Aadhaar_Number")
+	@ApiModelProperty(required = true)
+	private String aadhaarNumber;
 
-	@OneToOne(cascade = CascadeType.ALL)
-	@Getter(value = AccessLevel.NONE)
-	@Setter(value = AccessLevel.NONE)
-	@JoinColumn
-	private CustomerAadharImage customerAadharImage;
-
-	@JsonGetter
-	public CustomerAadharImage getCustomerAadharImage() {
-		return customerAadharImage;
-	}
-
-	@JsonIgnore
-	public void setCustomerAadharImage(CustomerAadharImage customerAadharImage) {
-		this.customerAadharImage = customerAadharImage;
-	}
+	private String customerAadharImage;
+	
+	private String customerProfilePic;
 
 	@OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JsonManagedReference("tax")

@@ -3,7 +3,6 @@ package com.ot.pigmy.repository;
 import java.util.List;
 import java.util.Optional;
 
-import com.ot.pigmy.dto.Customer;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.ot.pigmy.dto.Agent;

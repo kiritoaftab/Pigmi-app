@@ -1,9 +1,7 @@
 package com.ot.pigmy.controller;
 
-import java.io.IOException;
 import java.util.List;
 
-import com.ot.pigmy.dto.Customer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
@@ -20,9 +18,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.ot.pigmy.dto.Agent;
+import com.ot.pigmy.dto.Customer;
 import com.ot.pigmy.dto.ResponseStructure;
 import com.ot.pigmy.service.AgentService;
 
@@ -139,60 +137,6 @@ public class AgentController {
 	@PatchMapping(value = "/offline/{agentId}", produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<ResponseStructure<Object>> changeAgentProfileStatusToOffline(@PathVariable String agentId) {
 		return agentService.changeAgentProfileStatusToOffline(agentId);
-	}
-
-	@ApiOperation(value = "Save Agent Aadhar Card Image", notes = "Input is Agent Aadhar Card Image file")
-	@ApiResponses(value = { @ApiResponse(code = 201, message = "CREATED"),
-			@ApiResponse(code = 404, message = "Not Found") })
-	@PostMapping(value = "/uploadAgentAadharCardImage", consumes = { MediaType.ALL_VALUE }, produces = {
-			MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<ResponseStructure<String>> uploadAgentAadharCardImage(@RequestParam("agentId") String agentId,
-			@RequestParam("file") MultipartFile file) throws IOException {
-		return agentService.uploadAgentAadharCardImageByAgentId(agentId, file);
-	}
-
-	@ApiOperation(value = "Download Agent Aadhar Card Image", notes = "Input is Agent Id")
-	@ApiResponses(value = { @ApiResponse(code = 200, message = "Success"),
-			@ApiResponse(code = 404, message = "Not Found") })
-	@GetMapping(value = "/downloadAgentAadharCardImage", produces = { MediaType.ALL_VALUE })
-	public ResponseEntity<?> downloadAgentAadharCardImage(@RequestParam String agentId) {
-		return agentService.downloadAgentAadharCardImageByAgentId(agentId);
-	}
-
-	@ApiOperation(value = "Save Agent Pan Card Image", notes = "Input is Agent Pan Card Image file")
-	@ApiResponses(value = { @ApiResponse(code = 201, message = "CREATED"),
-			@ApiResponse(code = 404, message = "Not Found") })
-	@PostMapping(value = "/uploadAgentPanCardImage/{agentId}", consumes = { MediaType.ALL_VALUE }, produces = {
-			MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<ResponseStructure<String>> uploadAgentPanCardImage(@PathVariable String agentId,
-			@RequestParam("file") MultipartFile file) throws IOException {
-		return agentService.uploadAgentPanCardImageByAgentId(agentId, file);
-	}
-
-	@ApiOperation(value = "Download Agent Pan Card Image", notes = "Input is Agent Id")
-	@ApiResponses(value = { @ApiResponse(code = 200, message = "Success"),
-			@ApiResponse(code = 404, message = "Not Found") })
-	@GetMapping(value = "/downloadAgentPanCardImage", produces = { MediaType.ALL_VALUE })
-	public ResponseEntity<?> downloadAgentPanCardImage(@RequestParam String agentId) {
-		return agentService.downloadAgentPanCardImageByAgentId(agentId);
-	}
-
-	@ApiOperation(value = "Save Agent Profile Image", notes = "Input is Agent Profile Image file")
-	@ApiResponses(value = { @ApiResponse(code = 201, message = "CREATED"),
-			@ApiResponse(code = 404, message = "Not Found") })
-	@PostMapping(value = "/uploadAgentProfileImage/{agentId}", consumes = { MediaType.ALL_VALUE }, produces = {
-			MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<ResponseStructure<String>> uploadAgentProfileImage(@PathVariable String agentId,
-			@RequestParam("file") MultipartFile file) throws IOException {
-		return agentService.uploadAgentProfileImageByAgentId(agentId, file);
-	}
-
-	@ApiOperation(value = "Download Agent Profile Image", notes = "Input is Agent Id")
-	@ApiResponses(value = { @ApiResponse(code = 200, message = "Success"),
-			@ApiResponse(code = 404, message = "Not Found") })
-	@GetMapping(value = "/downloadAgentProfileImage", produces = { MediaType.ALL_VALUE })
-	public ResponseEntity<?> downloadAgentProfileImage(@RequestParam String agentId) {
-		return agentService.downloadAgentProfileImageByAgentId(agentId);
 	}
 
 	@ApiOperation(value = "Fetch Agent By Id Or Name", notes = "Input is Agent Id Or Agent Name")

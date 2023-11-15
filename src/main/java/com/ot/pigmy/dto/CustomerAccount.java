@@ -8,7 +8,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonGetter;
@@ -31,7 +30,7 @@ public class CustomerAccount {
 	private long id;
 
 	@Column(unique = true)
-	@NotNull
+	@NotBlank
 	@ApiModelProperty(required = true)
 	private String accountNumber;
 
@@ -39,6 +38,10 @@ public class CustomerAccount {
 	@ApiModelProperty(required = true)
 	private String accountType;
 
+	@NotBlank
+	@ApiModelProperty(required = true)
+	private String accountCode;
+	
 	@ApiModelProperty(required = true)
 	private double balance;
 

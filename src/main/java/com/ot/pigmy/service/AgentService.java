@@ -1,21 +1,20 @@
 package com.ot.pigmy.service;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import com.ot.pigmy.dao.CustomerDao;
-import com.ot.pigmy.dto.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.ot.pigmy.dao.AgentDao;
+import com.ot.pigmy.dao.CustomerDao;
+import com.ot.pigmy.dto.Agent;
+import com.ot.pigmy.dto.Customer;
+import com.ot.pigmy.dto.ResponseStructure;
 import com.ot.pigmy.exception.DataNotFoundException;
 import com.ot.pigmy.exception.DuplicateDataEntryException;
 import com.ot.pigmy.exception.EmailIdNotFoundException;
@@ -25,7 +24,6 @@ import com.ot.pigmy.exception.PhoneNumberNotFoundException;
 import com.ot.pigmy.exception.UserStatusIsOffline;
 import com.ot.pigmy.util.EmailSender;
 import com.ot.pigmy.util.Encryption;
-import com.ot.pigmy.util.ImageUtils;
 
 @Service
 public class AgentService {
@@ -43,7 +41,8 @@ public class AgentService {
 
 		ResponseStructure<Agent> responseStructure = new ResponseStructure<>();
 
-		if (agentDao.getAgentByEmail(agent.getEmail()) != null || agentDao.getAgentByPhone(agent.getPhone()) != null) {
+		if (agentDao.getAgentById(agent.getId()) != null || agentDao.getAgentByEmail(agent.getEmail()) != null
+				|| agentDao.getAgentByPhone(agent.getPhone()) != null) {
 
 			throw new DuplicateDataEntryException("Agent Already Exist's");
 
@@ -54,7 +53,7 @@ public class AgentService {
 					"Greetings \nYour Profile in Pigmy Account Has Been Created.\nThank You.",
 					"Hello " + agent.getAgentName());
 			responseStructure.setStatus(HttpStatus.CREATED.value());
-			responseStructure.setMessage("Admin Saved Successfully");
+			responseStructure.setMessage("Agent Saved Successfully");
 			responseStructure.setData(agentDao.saveAgent(agent));
 			return new ResponseEntity<>(responseStructure, HttpStatus.CREATED);
 		}
@@ -232,7 +231,7 @@ public class AgentService {
 
 	public ResponseEntity<ResponseStructure<Agent>> validateOtp(int otp) {
 		Agent agent = agentDao.getUserByOtp(otp);
-		if (agent != null) {
+		if (agent != null && agent.isStatus()) {
 			ResponseStructure<Agent> responseStructure = new ResponseStructure<>();
 			responseStructure.setStatus(HttpStatus.OK.value());
 			responseStructure.setMessage("Success");
@@ -287,195 +286,6 @@ public class AgentService {
 		}
 	}
 
-	public ResponseEntity<ResponseStructure<String>> uploadAgentAadharCardImageByAgentId(String agentId,
-			MultipartFile file) {
-		ResponseStructure<String> responseStructure = new ResponseStructure<>();
-		Agent agent = agentDao.getAgentById(agentId);
-		if (agent != null) {
-			if (agent.getAgentAadharCardImage() != null) {
-
-				if (file.getSize() > 4 * 1024 * 1024) {
-					throw new InvalidCredentialException("File size exceeds the maximum allowed limit (4MB)");
-				} else {
-					try {
-						agent.setAgentAadharCardImage(AgentAadharCardImage.builder().name(file.getOriginalFilename())
-								.type(file.getContentType()).imageData(ImageUtils.compressImage(file.getBytes()))
-								.id(agent.getAgentAadharCardImage().getId()).build());
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-				}
-			} else {
-				try {
-					agent.setAgentAadharCardImage(AgentAadharCardImage.builder().name(file.getOriginalFilename())
-							.type(file.getContentType()).imageData(ImageUtils.compressImage(file.getBytes())).build());
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-			agentDao.saveAgent(agent);
-			responseStructure.setStatus(HttpStatus.OK.value());
-			responseStructure.setMessage("Agent Aadhar Card Image Saved Successfully");
-			responseStructure.setData("Image Saved Successfully For Agent of Id -> " + agentId);
-			return new ResponseEntity<ResponseStructure<String>>(responseStructure, HttpStatus.OK);
-		} else {
-
-			throw new IdNotFoundException("Agent ID " + agentId + " not Found");
-		}
-	}
-
-	public ResponseEntity<?> downloadAgentAadharCardImageByAgentId(String agentId) {
-		Agent agent = agentDao.getAgentById(agentId);
-		if (agent != null) {
-			AgentAadharCardImage aadharCardImage = agent.getAgentAadharCardImage();
-			if (aadharCardImage != null) {
-				aadharCardImage.setImageData(ImageUtils.decompressImage(aadharCardImage.getImageData()));
-				byte[] img = aadharCardImage.getImageData();
-				return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.valueOf("image/png")).body(img);
-			} else {
-				throw new IdNotFoundException("Agent Aadhar Card Image is Not Present" + agentId);
-			}
-		} else {
-			throw new IdNotFoundException("Agent Id is Not Present" + agentId);
-		}
-	}
-
-	public ResponseEntity<ResponseStructure<String>> uploadAgentPanCardImageByAgentId(String agentId,
-			MultipartFile file) {
-		ResponseStructure<String> responseStructure = new ResponseStructure<>();
-		Agent agent = agentDao.getAgentById(agentId);
-		if (agent != null) {
-			if (agent.getAgentPanCardImage() != null) {
-
-				if (file.getSize() > 4 * 1024 * 1024) {
-					throw new InvalidCredentialException("File size exceeds the maximum allowed limit (4MB)");
-				} else {
-					try {
-						agent.setAgentPanCardImage(AgentPanCardImage.builder().name(file.getOriginalFilename())
-								.type(file.getContentType()).imageData(ImageUtils.compressImage(file.getBytes()))
-								.id(agent.getAgentAadharCardImage().getId()).build());
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-				}
-			} else {
-				try {
-					agent.setAgentPanCardImage(AgentPanCardImage.builder().name(file.getOriginalFilename())
-							.type(file.getContentType()).imageData(ImageUtils.compressImage(file.getBytes())).build());
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-			agentDao.saveAgent(agent);
-			responseStructure.setStatus(HttpStatus.OK.value());
-			responseStructure.setMessage("Agent Pan Card Image Saved Successfully");
-			responseStructure.setData("Image Saved Successfully For Agent of Id -> " + agentId);
-			return new ResponseEntity<ResponseStructure<String>>(responseStructure, HttpStatus.OK);
-		} else {
-
-			throw new IdNotFoundException("Agent ID " + agentId + " not Found");
-		}
-	}
-
-	public ResponseEntity<?> downloadAgentPanCardImageByAgentId(String agentId) {
-		Agent agent = agentDao.getAgentById(agentId);
-		if (agent != null) {
-			AgentPanCardImage agentPanCardImage = agent.getAgentPanCardImage();
-			if (agentPanCardImage != null) {
-				agentPanCardImage.setImageData(ImageUtils.decompressImage(agentPanCardImage.getImageData()));
-				byte[] img = agentPanCardImage.getImageData();
-				return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.valueOf("image/png")).body(img);
-			} else {
-				throw new IdNotFoundException("Agent Pan Card Image is Not Present" + agentId);
-			}
-		} else {
-			throw new IdNotFoundException("Agent Id is Not Present" + agentId);
-		}
-	}
-
-	public ResponseEntity<ResponseStructure<String>> uploadAgentProfileImageByAgentId(String agentId,
-			MultipartFile file) {
-		ResponseStructure<String> responseStructure = new ResponseStructure<>();
-		Agent agent = agentDao.getAgentById(agentId);
-		if (agent != null) {
-			if (agent.getAgentProfileImage() != null) {
-
-				if (file.getSize() > 4 * 1024 * 1024) {
-					throw new InvalidCredentialException("File size exceeds the maximum allowed limit (4MB)");
-				} else {
-					try {
-						agent.setAgentProfileImage(AgentProfileImage.builder().name(file.getOriginalFilename())
-								.type(file.getContentType()).imageData(ImageUtils.compressImage(file.getBytes()))
-								.id(agent.getAgentAadharCardImage().getId()).build());
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-				}
-			} else {
-				try {
-					agent.setAgentProfileImage(AgentProfileImage.builder().name(file.getOriginalFilename())
-							.type(file.getContentType()).imageData(ImageUtils.compressImage(file.getBytes())).build());
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-			agentDao.saveAgent(agent);
-			responseStructure.setStatus(HttpStatus.OK.value());
-			responseStructure.setMessage("Agent Pan Card Image Saved Successfully");
-			responseStructure.setData("Image Saved Successfully For Agent of Id -> " + agentId);
-			return new ResponseEntity<ResponseStructure<String>>(responseStructure, HttpStatus.OK);
-		} else {
-
-			throw new IdNotFoundException("Agent ID " + agentId + " not Found");
-		}
-	}
-
-	public ResponseEntity<?> downloadAgentProfileImageByAgentId(String agentId) {
-		Agent agent = agentDao.getAgentById(agentId);
-		if (agent != null) {
-			AgentProfileImage agentProfileImage = agent.getAgentProfileImage();
-			if (agentProfileImage != null) {
-				agentProfileImage.setImageData(ImageUtils.decompressImage(agentProfileImage.getImageData()));
-				byte[] img = agentProfileImage.getImageData();
-				return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.valueOf("image/png")).body(img);
-			} else {
-				throw new IdNotFoundException("Agent Pan Card Image is Not Present" + agentId);
-			}
-		} else {
-			throw new IdNotFoundException("Agent Id is Not Present" + agentId);
-		}
-	}
-
-//	public ResponseEntity<ResponseStructure<Agent>> getAgentByIdOrAgentByName(String input) {
-//		ResponseStructure<Agent> responseStructure = new ResponseStructure<>();
-//		if (input.matches(".*-(\\d+)")) {
-//			Agent agent = agentDao.getAgentById(input);
-//			if (agent != null) {
-//				responseStructure.setStatus(HttpStatus.OK.value());
-//				responseStructure.setMessage("Fetched Agent Details By Id");
-//				responseStructure.setData(agent);
-//				return new ResponseEntity<>(responseStructure, HttpStatus.OK);
-//			} else {
-//				throw new IdNotFoundException("Agent ID " + input + ", NOT FOUND");
-//			}
-//		} else {
-//
-//			List<Agent> agents = agentDao.getAgentByName(input);
-//			for (Agent agent : agents) {
-//				if (agent.getAgentName().equalsIgnoreCase(input) && agents.size() > 0) {
-//					responseStructure.setStatus(HttpStatus.OK.value());
-//					responseStructure.setMessage("Fetched Agent By Name");
-//					responseStructure.setData(agent);
-//					return new ResponseEntity<>(responseStructure, HttpStatus.OK);
-//				} else {
-//					throw new DataNotFoundException("Agent Data Not Present");
-//				}
-//			}
-//			return null;
-//		}
-//	}
-
-
 	public ResponseEntity<ResponseStructure<List<Agent>>> searchQuery(String query) {
 
 		ResponseStructure<List<Agent>> responseStructure = new ResponseStructure<>();
@@ -498,8 +308,6 @@ public class AgentService {
 			throw new IdNotFoundException("No match for " + query + ", NOT FOUND");
 		}
 	}
-
-
 
 	public ResponseEntity<ResponseStructure<List<Customer>>> getCustomersByAgentId(String agentId) {
 		ResponseStructure<List<Customer>> responseStructure = new ResponseStructure<>();
