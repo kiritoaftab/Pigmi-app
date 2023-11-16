@@ -180,9 +180,9 @@ public class AgentService {
 					int otp = (int) (Math.random() * (9999 - 1000) + 1000);
 					agent.setOtp(otp);
 					agentDao.saveAgent(agent);
-					emailSender.sendSimpleEmail(agent.getEmail(),
-							"Enter the Otp to Validate Your Self \n The Generated Otp " + otp, "Verify Your Otp");
-					responseStructure.setStatus(HttpStatus.OK.value());
+					// emailSender.sendSimpleEmail(agent.getEmail(),
+					// 		"Enter the Otp to Validate Your Self \n The Generated Otp " + otp, "Verify Your Otp");
+					// responseStructure.setStatus(HttpStatus.OK.value());
 					responseStructure.setMessage("OTP SENT");
 					responseStructure.setData(agent);
 					return new ResponseEntity<>(responseStructure, HttpStatus.OK);
