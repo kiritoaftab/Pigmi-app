@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
     },
     inputWrapper:{
         flex:0.2,
-        margin:SIZES.large,
+        margin:SIZES.small,
     },
     inputLabel:{
         fontFamily:FONT.semiBold,

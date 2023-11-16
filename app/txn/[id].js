@@ -11,7 +11,7 @@ const Transaction = () => {
     console.log(params);
 
     const { data, isLoading, error, refetch } = useTransaction(params.id);
-    console.log(data);
+    console.log("DATA" + data);
     const user ={
         name:"Aftab Ahmed",
         customerId: "C101",
@@ -44,6 +44,7 @@ const Transaction = () => {
                     }}
                 />
                 <TopTxnBanner/>
+                <Text>{JSON.stringify("DATA" + data)}</Text>
                 <TxnDetails 
                     user={user}
                     txn={txn}

@@ -11,7 +11,7 @@ const AddAmount = () => {
     const params = useGlobalSearchParams();
 
     const { data, isLoading, error, refetch } = useCustomer(params.id);
-    
+    console.log(data)
     const user = {
         customerId : params.id,
         name : data?.customerName,
