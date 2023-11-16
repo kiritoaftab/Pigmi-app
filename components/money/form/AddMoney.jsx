@@ -61,7 +61,7 @@ const AddMoney = ({ user }) => {
             router.push(`/txn/${response?.data?.data?.transaction?.id}`)
             console.log("Trnasaction ID" + response.data.data.transaction.id);
         } catch (error) {
-            console.log(error);
+            console.log(JSON.stringify(error)+" while fetching transaction");
             // setError(error);
             // setIsModalVisible(false);
             alert("There is an error");

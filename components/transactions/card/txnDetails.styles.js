@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
         
     },
     topRow:{
-        flex:0.2,
+        flex:0.5,
         flexDirection:"row",
         justifyContent:"space-between"
     },

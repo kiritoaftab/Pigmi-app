@@ -10,8 +10,8 @@ const Transaction = () => {
     const params = useGlobalSearchParams();
     console.log(params);
 
-    const { data, isLoading, error, refetch } = useTransaction(params.id);
-    console.log("DATA" + data);
+    const { data, isLoading, error, refetch } = useTransaction(params?.id);
+    console.log("DATA" + JSON.stringify(data));
     const user ={
         name:"Aftab Ahmed",
         customerId: "C101",
@@ -30,7 +30,8 @@ const Transaction = () => {
         isLoading? (
             <ActivityIndicator size={SIZES.large} color={COLORS.primary}/>
         ) : error ? (
-            alert('There is error')
+            <Text>{JSON.stringify(error)}</Text>
+            //alert('There is error')
         ) :
         <SafeAreaView
             style={{flex:1,  backgroundColor:COLORS.lightGreen, alignItems:"center"}}
@@ -46,6 +47,7 @@ const Transaction = () => {
                 <TopTxnBanner/>
                 <Text>{JSON.stringify("DATA" + data)}</Text>
                 <TxnDetails 
+                    data={data}
                     user={user}
                     txn={txn}
                 />
