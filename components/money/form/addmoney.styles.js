@@ -50,8 +50,36 @@ const styles = StyleSheet.create({
         height:"60%",
         borderRadius:30,
         borderWidth:0.2,
-        padding:SIZES.medium,
+        // padding:SIZES.medium,
         flexDirection:"column"
+    },
+    accountTypeSelection: {
+        marginBottom: 20,
+    },
+    accountTypeLabel: {
+        // fontSize: 18,
+        // marginBottom: 10,
+        // marginTop: 10,
+        fontWeight: 'bold',
+    },
+    radioGroup: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+    },
+    radioButton: {
+        borderWidth: 1,
+        borderColor: '#ccc',
+        paddingVertical: 8,
+        paddingHorizontal: 20,
+        borderRadius: 5,
+    },
+    radioButtonSelected: {
+        backgroundColor: 'lightblue',
+        borderColor: 'blue',
+    },
+    radioText: {
+        fontSize: 16,
+        fontWeight: 'bold',
     },
     topRow:{
         flex:1,
@@ -85,22 +113,20 @@ const styles = StyleSheet.create({
 
     },
     amtWrapper:{
-        flex:1,
-        
-        
+        flex:1,    
     },
     amountWrapper:{
         width:"90%",
         borderWidth:1,
         borderRadius:20,
         alignSelf:"center",
-        padding:SIZES.small,
+        // padding:SIZES.small,
     },
     amount:{
         fontFamily:FONT.semiBold,
     },
     payWrapper:{
-        marginTop:SIZES.large,
+        // marginTop:SIZES.large,
         padding:SIZES.medium,
         flex:1,
         flexDirection:"row",
@@ -124,7 +150,7 @@ const styles = StyleSheet.create({
     },
     upiLabel:{
         fontFamily:FONT.extraBold,
-        paddingBottom:SIZES.xSmall
+        // paddingBottom:SIZES.xSmall
     },
     modalView:{
         padding:SIZES.large,
@@ -140,7 +166,7 @@ const styles = StyleSheet.create({
         alignItems: "center",
     },
     upiImg:{
-        height:250,
+        // height:250,
         width:250,
     },
     header:{
@@ -153,9 +179,9 @@ const styles = StyleSheet.create({
         color:COLORS.green
     },
     paymentButtonWrapper:{
-        marginVertical:SIZES.medium,
+        // marginVertical:SIZES.medium,
         backgroundColor:COLORS.green,
-        padding:SIZES.medium,
+        // padding:SIZES.medium,
         borderRadius:15,
     },
     paymentButton:{
@@ -164,12 +190,12 @@ const styles = StyleSheet.create({
     },
     accountNumberWrap:{
         
-        marginTop:SIZES.medium,
+        // marginTop:SIZES.medium,
         marginBottom:SIZES.medium,
     },
     accNumHead:{
         fontFamily:FONT.extraBold,
-        marginTop:SIZES.small,
+        // marginTop:SIZES.small,
     },
     accountNumber:{
         fontFamily:FONT.regular,

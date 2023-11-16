@@ -17,7 +17,7 @@ const useCustomer = (customerId) => {
 
         try{
           const response = await axios.request(options);
-          console.log(response.data.data)
+          console.log(response.data.data) 
           setData(response.data.data)
           setIsLoading(false)
         }catch(error){

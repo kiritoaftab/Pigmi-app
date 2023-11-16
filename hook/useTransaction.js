@@ -3,6 +3,8 @@ import axios from "axios";
 import { BASE_URL } from "../constants";
 
 const useTransaction = (txnId) => {
+  
+  console.log(`Txn id data fetch ${JSON.stringify(txnId)}`)
     const [data,setData] = useState([]);
     const [isLoading,setIsLoading] = useState(false)
     const [error,setError]= useState(null)
@@ -23,15 +25,16 @@ const useTransaction = (txnId) => {
         }catch(error){
           setError(error)
           alert('There is an error')
+          console.log(error)
         }finally{
           setIsLoading(false)
         }
       }
 
-      useEffect( () => {
-
-        fetchData();
-      },[])
+      useEffect(() => {
+        if(txnId)
+          fetchData();
+    }, []);
 
       const refetch = () => {
         setIsLoading(true);
