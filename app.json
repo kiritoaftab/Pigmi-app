@@ -8,6 +8,17 @@
       "expo-router"
     ],
     "name": "pigmi-app",
-    "slug": "pigmi-app"
+    "slug": "pigmi-app",
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "eceda1fc-598a-4fd4-8145-9e66849d2b48"
+      }
+    },
+    "android": {
+      "package": "com.kiritoaftab.pigmiapp"
+    }
   }
 }
