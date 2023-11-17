@@ -2,6 +2,7 @@ package com.ot.pigmy.controller;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -22,6 +23,7 @@ import com.ot.pigmy.dto.ResponseStructure;
 import com.ot.pigmy.dto.Transaction;
 import com.ot.pigmy.dto.request.PrintTransactionDetails;
 import com.ot.pigmy.dto.request.TransactionResp;
+import com.ot.pigmy.repository.TransactionRepository;
 import com.ot.pigmy.service.TransactionService;
 
 import io.swagger.annotations.ApiOperation;
@@ -34,6 +36,9 @@ import io.swagger.annotations.ApiResponses;
 public class TransactionController {
 	@Autowired
 	private TransactionService transactionService;
+
+	@Autowired
+	private TransactionRepository transactionRepository;
 
 	@ApiOperation(value = "Save Transaction", notes = "Input is Transaction Object and return TransactionResp object")
 	@ApiResponses(value = { @ApiResponse(code = 201, message = "CREATED"),
@@ -76,17 +81,31 @@ public class TransactionController {
 		return transactionService.findByTransactionId(id);
 	}
 
-//	@GetMapping("/excel/{localDate}")
-//	public void generateExcelReport(HttpServletResponse response, @PathVariable LocalDate localDate) throws Exception {
-//		response.setContentType("application/vnd.ms-excel");
-//		String headerKey = "Content-Disposition";
-//		String headerValue = "attachment;filename = transaction.xls";
-//		response.setHeader(headerKey, headerValue);
-//		transactionService.generateTransactionExcel(response, localDate);
-//	}
-	
 	@GetMapping("/csv/{agentId}/{localDate}")
-	public void generateCSVReport(HttpServletResponse response,@PathVariable String agentId, @PathVariable LocalDate localDate) {
-		transactionService.generateTransactionCSV(response, agentId ,localDate);
+	public void generateCSVReport(HttpServletResponse response, @PathVariable String agentId,
+			@PathVariable LocalDate localDate) {
+		transactionService.generateTransactionCSV(response, agentId, localDate);
+	}
+
+	@GetMapping("/generateAndUploadPDF/{id}")
+	public String generateAndUploadPDF(@PathVariable long id) {
+		try {
+			// Fetch user details from the database
+			Optional<Transaction> transaction = transactionRepository.findById(id);
+			if (transaction.isPresent()) {
+				// Generate PDF for the user
+				String pdfFileName = "AgentId "+transaction.get().getAgentId() + ".pdf";
+				transactionService.generateUserPDF(transaction.get(), pdfFileName);
+
+				// Upload PDF to the user's AWS S3 bucket
+				transactionService.uploadToUserS3Bucket(pdfFileName);
+
+				return "PDF generated and uploaded to user's AWS S3 bucket successfully!";
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return "Error generating or uploading PDF!";
+		}
+		return null;
 	}
 }

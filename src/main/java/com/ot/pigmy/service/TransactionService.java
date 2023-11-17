@@ -1,8 +1,12 @@
 package com.ot.pigmy.service;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 
@@ -11,11 +15,19 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.amazonaws.services.s3.AmazonS3;
+import com.itextpdf.kernel.geom.PageSize;
+import com.itextpdf.kernel.pdf.PdfDocument;
+import com.itextpdf.kernel.pdf.PdfWriter;
+import com.itextpdf.layout.Document;
+import com.itextpdf.layout.element.Paragraph;
+import com.itextpdf.layout.property.TextAlignment;
 import com.ot.pigmy.dao.AgentDao;
 import com.ot.pigmy.dao.CustomerAccountDao;
 import com.ot.pigmy.dao.CustomerDao;
@@ -35,6 +47,13 @@ import com.ot.pigmy.util.EmailSender;
 
 @Service
 public class TransactionService {
+
+	@Value("${aws.s3.bucketName}")
+	private String bucketName;
+
+	@Autowired
+	private AmazonS3 amazonS3;
+
 	@Autowired
 	private TransactionDao transactionDao;
 
@@ -182,101 +201,112 @@ public class TransactionService {
 		}
 	}
 
-//	public void generateTransactionExcel(HttpServletResponse response, LocalDate localDate) {
-//		List<Transaction> list = transactionDao.findByTransactionDate(localDate);
-//
-//		HSSFWorkbook workbook = new HSSFWorkbook();
-//		HSSFSheet sheet = workbook.createSheet("Transaction's Info");
-//		HSSFRow row = sheet.createRow(0);
-//
-//		row.createCell(0).setCellValue("BRANCH ID");
-//		row.createCell(1).setCellValue("AGENT CODE");
-//		row.createCell(2).setCellValue("ACCOUNT TYPE");
-//		row.createCell(3).setCellValue("ACCOUNT CODE");
-//		row.createCell(4).setCellValue("ACCOUNTNO");
-//		row.createCell(5).setCellValue("CUSTOMER ID");
-//		row.createCell(6).setCellValue("ACCOUNT NAME");
-//		row.createCell(7).setCellValue("LANDMARK");
-//		row.createCell(8).setCellValue("AGREED AMOUNT");
-//		row.createCell(9).setCellValue("BALANCE AMOUNT");
-//		row.createCell(10).setCellValue("OPEN DATE");
-//		row.createCell(11).setCellValue("LAST COLLECTION DATE");
-//		row.createCell(12).setCellValue("LEAN ACCOUNT");
-//		row.createCell(13).setCellValue("LEAN OPENDATE");
-//		row.createCell(14).setCellValue("LEAN AMOUNT");
-//		row.createCell(15).setCellValue("LEAN BALANCE");
-//		row.createCell(16).setCellValue("COLLECTION AMOUNT");
-//		row.createCell(17).setCellValue("COLLECTION DATETIME");
-//
-//		int dataRowIndex = 1;
-//
-//		for (Transaction transac : list) {
-//			Customer customer = customerDao.findCustomerById(transac.getCustomerId());
-//			Optional<CustomerAccount> customerAccount = customerAccountNumberRepository
-//					.findByAccountNumber(transac.getAccountNumber());
-//			HSSFRow dataRow = sheet.createRow(dataRowIndex);
-//			dataRow.createCell(0).setCellValue(1);
-//			dataRow.createCell(1).setCellValue(transac.getAgentId());
-//			dataRow.createCell(2).setCellValue(transac.getAccountType());
-//			dataRow.createCell(3).setCellValue(transac.getAccountCode());
-//			dataRow.createCell(4).setCellValue(transac.getAccountNumber());
-//			dataRow.createCell(5).setCellValue(transac.getCustomerId());
-//			dataRow.createCell(6).setCellValue(customer.getCustomerName());
-//			dataRow.createCell(7).setCellValue(customer.getAddress());
-//			dataRow.createCell(8).setCellValue(transac.getAmount());
-//			dataRow.createCell(9).setCellValue(customerAccount.get().getBalance());
-//			dataRow.createCell(10).setCellValue(customer.getJoiningTime());
-//			dataRow.createCell(11).setCellValue(transac.getTransactionDate());
-//			dataRow.createCell(12).setCellValue("");
-//			dataRow.createCell(13).setCellValue("");
-//			dataRow.createCell(14).setCellValue("");
-//			dataRow.createCell(15).setCellValue("");
-//			dataRow.createCell(16).setCellValue("");
-//			dataRow.createCell(17).setCellValue("");
-//			dataRowIndex++;
-//		}
-//		try {
-//
-//			ServletOutputStream ops = response.getOutputStream();
-//			workbook.write(ops);
-//			workbook.close();
-//			ops.close();
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
-//	}
+	public void generateTransactionCSV(HttpServletResponse response, String agentId, LocalDate localDate) {
+		List<Transaction> list = transactionDao.findByAgentIdAndTransactionDate(agentId, localDate);
+		if (list.size() > 0) {
+			try (PrintWriter writer = response.getWriter();
+					CSVPrinter csvPrinter = new CSVPrinter(writer, CSVFormat.DEFAULT)) {
 
-	public void generateTransactionCSV(HttpServletResponse response,String agentId, LocalDate localDate) {
-		List<Transaction> list = transactionDao.findByAgentIdAndTransactionDate(agentId,localDate);
+				// Add CSV header
+				csvPrinter.printRecord("BRANCH ID", "AGENT CODE", "ACCOUNT TYPE", "ACCOUNT CODE", "ACCOUNTNO",
+						"CUSTOMER ID", "ACCOUNT NAME", "LANDMARK", "AGREED AMOUNT", "BALANCE AMOUNT", "OPEN DATE",
+						"LAST COLLECTION DATE", "LEAN ACCOUNT", "LEAN OPENDATE", "LEAN AMOUNT", "LEAN BALANCE",
+						"COLLECTION AMOUNT", "COLLECTION DATETIME");
 
-		try (PrintWriter writer = response.getWriter();
-				CSVPrinter csvPrinter = new CSVPrinter(writer, CSVFormat.DEFAULT)) {
+				for (Transaction transac : list) {
+					Customer customer = customerDao.findCustomerById(transac.getCustomerId());
+					Optional<CustomerAccount> customerAccount = customerAccountNumberRepository
+							.findByAccountNumber(transac.getAccountNumber());
 
-			// Add CSV header
-			csvPrinter.printRecord("BRANCH ID", "AGENT CODE", "ACCOUNT TYPE", "ACCOUNT CODE", "ACCOUNTNO",
-					"CUSTOMER ID", "ACCOUNT NAME", "LANDMARK", "AGREED AMOUNT", "BALANCE AMOUNT", "OPEN DATE",
-					"LAST COLLECTION DATE", "LEAN ACCOUNT", "LEAN OPENDATE", "LEAN AMOUNT", "LEAN BALANCE",
-					"COLLECTION AMOUNT", "COLLECTION DATETIME");
+					csvPrinter.printRecord(1, transac.getAgentId(), transac.getAccountType(), transac.getAccountCode(),
+							transac.getAccountNumber(), transac.getCustomerId(), customer.getCustomerName(),
+							customer.getAddress(), 100, customerAccount.get().getBalance(), customer.getJoiningTime(),
+							transac.getTransactionDate(), "", "", "", "", transac.getAmount(),
+							transac.getLocalDateTime());
+				}
 
-			for (Transaction transac : list) {
-				Customer customer = customerDao.findCustomerById(transac.getCustomerId());
-				Optional<CustomerAccount> customerAccount = customerAccountNumberRepository
-						.findByAccountNumber(transac.getAccountNumber());
+				response.setContentType("text/csv");
+				response.setHeader("Content-Disposition",
+						"attachment; filename=transaction_" + agentId + "_" + localDate + ".csv");
 
-				csvPrinter.printRecord(1, transac.getAgentId(), transac.getAccountType(), transac.getAccountCode(),
-						transac.getAccountNumber(), transac.getCustomerId(), customer.getCustomerName(),
-						customer.getAddress(), 100, customerAccount.get().getBalance(),
-						customer.getJoiningTime(), transac.getTransactionDate(), "", "", "", "", transac.getAmount(), transac.getLocalDateTime());
+				response.flushBuffer();
+				csvPrinter.flush();
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
-
-			response.setContentType("text/csv");
-			response.setHeader("Content-Disposition", "attachment; filename=transaction_"+agentId+"_" + localDate + ".csv");
-
-			response.flushBuffer();
-			csvPrinter.flush();
-		} catch (IOException e) {
-			e.printStackTrace();
+		} else {
+			throw new DataNotFoundException("No Transaction Data Found");
 		}
+
+	}
+
+	public void generateUserPDF(Transaction transaction, String pdfFileName) throws FileNotFoundException {
+
+		Optional<CustomerAccount> customerAccount = customerAccountNumberRepository
+				.findByAccountNumber(transaction.getAccountNumber());
+
+		Customer customer = customerDao.findCustomerById(transaction.getCustomerId());
+
+		Agent agent = agentDao.getAgentById(transaction.getAgentId());
+
+		PdfWriter writer = new PdfWriter(pdfFileName);
+
+		// Set custom page size with height=7 and width=5
+		PageSize customPageSize = new PageSize(7 * 72, 5 * 72); // 72 points = 1 inch
+
+		PdfDocument pdf = new PdfDocument(writer);
+		pdf.setDefaultPageSize(customPageSize); // Set the custom page size
+
+		Document document = new Document(pdf);
+		document.setTextAlignment(TextAlignment.CENTER);
+
+		// Get current date and time
+		LocalDateTime currentTime = LocalDateTime.now();
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd    " + "    HH:mm:ss");
+		String formattedDateTime = currentTime.format(formatter);
+
+		// Add current time to the PDF
+		Paragraph currentTimePara = new Paragraph();
+		currentTimePara.add(" " + formattedDateTime + "\n" + "\n");
+		currentTimePara.setTextAlignment(TextAlignment.RIGHT);
+
+		Paragraph paragraph = new Paragraph();
+		paragraph.add("UNION BANK " + "\n" + "\n");
+		paragraph.setTextAlignment(TextAlignment.CENTER);
+
+		// Add user details to the PDF
+		Paragraph userDetails = new Paragraph();
+		userDetails.add("Your Transaction Detail's : " + "\n" + "\n");
+		userDetails.add("Amount Deposited	" + transaction.getAmount() + "\n");
+		userDetails.add("Account Number		" + transaction.getAccountNumber() + "\n");
+		userDetails.add("Account Type		" + transaction.getAccountType() + "\n");
+		userDetails.add("Transaction time		" + transaction.getLocalDateTime() + "\n");
+		userDetails.add("Your Account Balance		" + customerAccount.get().getBalance() + "\n");
+		userDetails.add("Customer Name		" + customer.getCustomerName() + "\n");
+		userDetails.add("Agent Name		" + agent.getAgentName() + "\n");
+		userDetails.setTextAlignment(TextAlignment.LEFT);
+
+		document.add(paragraph);
+		document.add(currentTimePara);
+		document.add(userDetails);
+
+		document.close();
+		pdf.close();
+		System.out.println("PDF created successfully.");
+	}
+
+	public String uploadToUserS3Bucket(String pdfFileName1) {
+
+		// Use user-specific bucket or folder structure in S3
+		String userBucket = "awsbucket99999";
+		String folderName = "pigmypdf";
+		String key = folderName + "/" + pdfFileName1;
+
+		// Upload file to user's S3 bucket
+		amazonS3.putObject(userBucket, key, new File(pdfFileName1));
+
+		return amazonS3.getUrl(userBucket, key).toString();
+
 	}
 
 }
