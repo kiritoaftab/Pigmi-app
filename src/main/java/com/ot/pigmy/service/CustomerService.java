@@ -237,8 +237,11 @@ public class CustomerService {
 					} else {
 						return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Amount Entered is Invalid");
 					}
-				} else {
+				} else if (daysSinceJoining < 180) {
+
 					return ResponseEntity.ok("Customer is not active for 180 days yet.");
+				} else {
+
 				}
 			} else {
 				return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Customer Account not found");
@@ -246,6 +249,7 @@ public class CustomerService {
 		} else {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Customer not found");
 		}
+		return null;
 
 	}
 }

@@ -94,7 +94,8 @@ public class TransactionController {
 			Optional<Transaction> transaction = transactionRepository.findById(id);
 			if (transaction.isPresent()) {
 				// Generate PDF for the user
-				String pdfFileName = "AgentId "+transaction.get().getAgentId() + ".pdf";
+				String pdfFileName = "AgentId-" + transaction.get().getAgentId() + "-"
+						+ transaction.get().getCustomerId() + "-" + LocalDate.now() + ".pdf";
 				transactionService.generateUserPDF(transaction.get(), pdfFileName);
 
 				// Upload PDF to the user's AWS S3 bucket

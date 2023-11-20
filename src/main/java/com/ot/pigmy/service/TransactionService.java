@@ -26,6 +26,7 @@ import com.itextpdf.kernel.geom.PageSize;
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.layout.Document;
+import com.itextpdf.layout.Style;
 import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.property.TextAlignment;
 import com.ot.pigmy.dao.AgentDao;
@@ -136,7 +137,7 @@ public class TransactionService {
 			responseStructure.setMessage("Fetch Transaction By Id");
 			responseStructure.setData(transactions);
 			return new ResponseEntity<>(responseStructure, HttpStatus.OK);
-		} else if (query.matches(".*\\d.*") && query.startsWith("A")) {
+		} else if (query.matches(".*\\d.*")) {
 			List<Transaction> transactions = transactionDao.findByAgentId(query);
 			if (transactions.isEmpty()) {
 				throw new IdNotFoundException("Id Not Found " + query);
@@ -242,8 +243,10 @@ public class TransactionService {
 
 	public void generateUserPDF(Transaction transaction, String pdfFileName) throws FileNotFoundException {
 
-		Optional<CustomerAccount> customerAccount = customerAccountNumberRepository
-				.findByAccountNumber(transaction.getAccountNumber());
+		/*
+		 * Optional<CustomerAccount> customerAccount = customerAccountNumberRepository
+		 * .findByAccountNumber(transaction.getAccountNumber());
+		 */
 
 		Customer customer = customerDao.findCustomerById(transaction.getCustomerId());
 
@@ -252,7 +255,7 @@ public class TransactionService {
 		PdfWriter writer = new PdfWriter(pdfFileName);
 
 		// Set custom page size with height=7 and width=5
-		PageSize customPageSize = new PageSize(7 * 72, 5 * 72); // 72 points = 1 inch
+		PageSize customPageSize = new PageSize(6 * 72, 2 * 72); // 72 points = 1 inch
 
 		PdfDocument pdf = new PdfDocument(writer);
 		pdf.setDefaultPageSize(customPageSize); // Set the custom page size
@@ -262,32 +265,44 @@ public class TransactionService {
 
 		// Get current date and time
 		LocalDateTime currentTime = LocalDateTime.now();
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd    " + "    HH:mm:ss");
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd    " + "HH:mm:ss");
 		String formattedDateTime = currentTime.format(formatter);
 
 		// Add current time to the PDF
+
 		Paragraph currentTimePara = new Paragraph();
-		currentTimePara.add(" " + formattedDateTime + "\n" + "\n");
+		currentTimePara.add("" + formattedDateTime + "\n");
 		currentTimePara.setTextAlignment(TextAlignment.RIGHT);
+//		currentTimePara.setFontSize(16);
 
 		Paragraph paragraph = new Paragraph();
-		paragraph.add("UNION BANK " + "\n" + "\n");
+		paragraph.add("Union Cooperative Society Limited" + "\n");
+		paragraph.add("---------------------------------------------------------"+ "\n");
 		paragraph.setTextAlignment(TextAlignment.CENTER);
+		Style bold = new Style().setBold();
+		paragraph.addStyle(bold);
+//		paragraph.setFontSize(18);
 
 		// Add user details to the PDF
 		Paragraph userDetails = new Paragraph();
-		userDetails.add("Your Transaction Detail's : " + "\n" + "\n");
-		userDetails.add("Amount Deposited	" + transaction.getAmount() + "\n");
-		userDetails.add("Account Number		" + transaction.getAccountNumber() + "\n");
-		userDetails.add("Account Type		" + transaction.getAccountType() + "\n");
-		userDetails.add("Transaction time		" + transaction.getLocalDateTime() + "\n");
-		userDetails.add("Your Account Balance		" + customerAccount.get().getBalance() + "\n");
-		userDetails.add("Customer Name		" + customer.getCustomerName() + "\n");
-		userDetails.add("Agent Name		" + agent.getAgentName() + "\n");
+		userDetails.add("Amount Deposited	: " + transaction.getAmount() + "\n");
+		userDetails.add("Account Number		: " + transaction.getAccountNumber() + "\n");
+		/*
+		 * userDetails.add("Account Type		: " + transaction.getAccountType() +
+		 * "\n");
+		 */
+		userDetails.add("Transaction time	: " + transaction.getLocalDateTime() + "\n");
+		/*
+		 * userDetails.add("Your Account Balance	: " +
+		 * customerAccount.get().getBalance() + "\n");
+		 */
+		userDetails.add("Customer Name		: " + customer.getCustomerName() + "\n");
+		userDetails.add("Agent Name		    : " + agent.getAgentName() + "\n");
 		userDetails.setTextAlignment(TextAlignment.LEFT);
+//		userDetails.setFontSize(16);
 
 		document.add(paragraph);
-		document.add(currentTimePara);
+	    document.add(currentTimePara);
 		document.add(userDetails);
 
 		document.close();
