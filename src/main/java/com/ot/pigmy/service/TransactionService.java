@@ -26,7 +26,6 @@ import com.itextpdf.kernel.geom.PageSize;
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.layout.Document;
-import com.itextpdf.layout.Style;
 import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.property.TextAlignment;
 import com.ot.pigmy.dao.AgentDao;
@@ -243,10 +242,8 @@ public class TransactionService {
 
 	public void generateUserPDF(Transaction transaction, String pdfFileName) throws FileNotFoundException {
 
-		/*
-		 * Optional<CustomerAccount> customerAccount = customerAccountNumberRepository
-		 * .findByAccountNumber(transaction.getAccountNumber());
-		 */
+		Optional<CustomerAccount> customerAccount = customerAccountNumberRepository
+				.findByAccountNumber(transaction.getAccountNumber());
 
 		Customer customer = customerDao.findCustomerById(transaction.getCustomerId());
 
@@ -255,55 +252,66 @@ public class TransactionService {
 		PdfWriter writer = new PdfWriter(pdfFileName);
 
 		// Set custom page size with height=7 and width=5
-		PageSize customPageSize = new PageSize(6 * 72, 2 * 72); // 72 points = 1 inch
+		PageSize customPageSize = new PageSize(18 * 72, 20 * 72); // 72 points = 1 inch
 
 		PdfDocument pdf = new PdfDocument(writer);
 		pdf.setDefaultPageSize(customPageSize); // Set the custom page size
 
 		Document document = new Document(pdf);
-		document.setTextAlignment(TextAlignment.CENTER);
 
 		// Get current date and time
 		LocalDateTime currentTime = LocalDateTime.now();
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd    " + "HH:mm:ss");
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd   " + "HH:mm:ss");
 		String formattedDateTime = currentTime.format(formatter);
 
-		// Add current time to the PDF
-
-		Paragraph currentTimePara = new Paragraph();
-		currentTimePara.add("" + formattedDateTime + "\n");
-		currentTimePara.setTextAlignment(TextAlignment.RIGHT);
-//		currentTimePara.setFontSize(16);
-
 		Paragraph paragraph = new Paragraph();
-		paragraph.add("Union Cooperative Society Limited" + "\n");
-		paragraph.add("---------------------------------------------------------"+ "\n");
-		paragraph.setTextAlignment(TextAlignment.CENTER);
-		Style bold = new Style().setBold();
-		paragraph.addStyle(bold);
-//		paragraph.setFontSize(18);
+		Paragraph phone = new Paragraph();
+		Paragraph firstline = new Paragraph();
 
+		paragraph.add("Union Cooperative Society Limited");
+		phone.add("9 9 8 6 9 6 8 8 8 0");
+		phone.setTextAlignment(TextAlignment.RIGHT);
+		phone.setFontSize(62);
+		firstline.add("============================");
+		paragraph.setTextAlignment(TextAlignment.LEFT);
+		paragraph.setFontSize(68);
+		firstline.setFontSize(61);
 		// Add user details to the PDF
 		Paragraph userDetails = new Paragraph();
-		userDetails.add("Amount Deposited	: " + transaction.getAmount() + "\n");
-		userDetails.add("Account Number		: " + transaction.getAccountNumber() + "\n");
-		/*
-		 * userDetails.add("Account Type		: " + transaction.getAccountType() +
-		 * "\n");
-		 */
-		userDetails.add("Transaction time	: " + transaction.getLocalDateTime() + "\n");
-		/*
-		 * userDetails.add("Your Account Balance	: " +
-		 * customerAccount.get().getBalance() + "\n");
-		 */
-		userDetails.add("Customer Name		: " + customer.getCustomerName() + "\n");
-		userDetails.add("Agent Name		    : " + agent.getAgentName() + "\n");
-		userDetails.setTextAlignment(TextAlignment.LEFT);
-//		userDetails.setFontSize(16);
+		userDetails.add("DT TM	        : ");
+		userDetails.add(" " + formattedDateTime + "\n");
+
+		userDetails.add("DEP. AMT      :") // Label with spaces after the colon
+				.add("                         " + transaction.getAmount() + "\n") // Add space before the data
+				.add("ACC. NO.      :") // Next label
+				.add("                        " + transaction.getAccountNumber() + "\n"); // Add space before the data
+		userDetails.add("ACC. TYPE     :");
+		userDetails.add("                    " + transaction.getAccountType() + "\n");
+		userDetails.add("CUR. BAL.     : ");
+		userDetails.add("                         " + customerAccount.get().getBalance() + "\n");
+		userDetails.add("CUST NAME     : ");
+		userDetails.add("           " + customer.getCustomerName() + "\n");
+		userDetails.add("AGENT NAME    : ");
+		userDetails.add("           " + agent.getAgentName() + "\n");
+		userDetails.add("ACC. OPN. DT: ");
+		userDetails.add("               " + customer.getJoiningTime());
+
+		userDetails.setFontSize(58);
+		Paragraph endline = new Paragraph();
+		endline.add("============================" + "\n");
+		endline.setFontSize(61);
+
+		Paragraph tq = new Paragraph();
+		tq.add("THANK YOU");
+		tq.setFontSize(58);
+		tq.setTextAlignment(TextAlignment.CENTER);
 
 		document.add(paragraph);
-	    document.add(currentTimePara);
+		document.add(phone);
+		document.add(firstline);
 		document.add(userDetails);
+		document.add(endline);
+		document.add(tq);
 
 		document.close();
 		pdf.close();

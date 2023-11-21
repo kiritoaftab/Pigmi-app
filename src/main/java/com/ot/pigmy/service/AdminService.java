@@ -54,6 +54,7 @@ public class AdminService {
 		ResponseStructure<Admin> responseStructure = new ResponseStructure<>();
 		Admin admin = adminDao.getAdminById(id);
 		if (admin != null) {
+			admin.setPassword(Encryption.decrypt(admin.getPassword()));
 			responseStructure.setStatus(HttpStatus.OK.value());
 			responseStructure.setMessage("Fetched Admin Details By Id");
 			responseStructure.setData(admin);

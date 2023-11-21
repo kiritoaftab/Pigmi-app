@@ -55,7 +55,9 @@ public class Admin {
 	@NotBlank(message = "Please Enter the Admin-Address")
 	@ApiModelProperty(required = true)
 	private String address;
-	
+
+	private String adminProfilePic;
+
 	@JsonIgnore
 	private int otp;
 
