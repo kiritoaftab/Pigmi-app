@@ -216,32 +216,114 @@ public class CustomerService {
 	}
 
 	public ResponseEntity<String> withDrawalOfAmount(String id, String accountType, double withdrawAmount) {
+//		Customer customer = customerDao.findCustomerById(id);
+//		if (customer != null) {
+//			Optional<CustomerAccount> customerAccount = customerAccountNumberRepository
+//					.findByCustomerIdAndAccountType(id, accountType);
+//			if (customerAccount.isPresent()) {
+//				double remBalance = customerAccount.get().getBalance();
+//				LocalDate joiningDate = customer.getJoiningTime();
+//				LocalDate today = LocalDate.now();
+//
+//				long daysSinceJoining = ChronoUnit.DAYS.between(joiningDate, today);
+//
+//				if (daysSinceJoining >= 180) {
+//					if (withdrawAmount < remBalance) {
+//						if (withdrawAmount == remBalance) {
+//							double amount = remBalance - withdrawAmount;
+//							CustomerAccount customerAccount2 = new CustomerAccount();
+//							customerAccount2.setBalance(amount);
+//							customer.setJoiningTime(LocalDate.now());
+//							customerAccountNumberRepository.save(customerAccount2);
+//
+//						} else {
+//							return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Amount Entered is Invalid");
+//						}
+//
+//						double amount = remBalance - withdrawAmount;
+//						CustomerAccount customerAccount1 = new CustomerAccount();
+//						customerAccount1.setBalance(amount);
+//						customer.setJoiningTime(LocalDate.now());
+//						customerAccountNumberRepository.save(customerAccount1);
+//						return ResponseEntity.ok("Customer has been active for at least 180 days.");
+//
+//					} else {
+//						return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Amount Entered is Invalid");
+//					}
+//				} else if (daysSinceJoining < 180) {
+//					if(withdrawAmount<remBalance) {
+//						if(withdrawAmount==remBalance) {
+//							double amount=remBalance-withdrawAmount;
+//							CustomerAccount customerAccount3= new CustomerAccount();
+//							customerAccount3.setBalance(amount);
+//							customer.setJoiningTime(LocalDate.now());
+//							customerAccountNumberRepository.save(customerAccount3);
+//						}else {
+//							return ResponseEntity.status(HttpStatus.NOT_FOUND).body("InSufficient Balance");
+//						}
+//						
+//						double amount=remBalance-withdrawAmount;
+//						CustomerAccount customerAccount3=new CustomerAccount();
+//						double percentAmount=amount-(amount*3/100);
+//						customerAccount3.setBalance(percentAmount);
+//						customer.setJoiningTime(LocalDate.now());
+//						customerAccountNumberRepository.save(customerAccount3);
+//						return ResponseEntity.ok("Deduction of 3% Because Withdrawing before 6 months."+percentAmount);
+//					}
+//					
+//					
+//					return ResponseEntity.ok("Customer is not active for 180 days yet.");
+//				} else {
+//
+//				}
+//			} else {
+//				return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Customer Account not found");
+//			}
+//		} else {
+//			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Customer not found");
+//		}
+//		return null;
+
 		Customer customer = customerDao.findCustomerById(id);
+
 		if (customer != null) {
-			Optional<CustomerAccount> customerAccount = customerAccountNumberRepository
+			Optional<CustomerAccount> customerAccountOpt = customerAccountNumberRepository
 					.findByCustomerIdAndAccountType(id, accountType);
-			if (customerAccount.isPresent()) {
-				double remBalance = customerAccount.get().getBalance();
+
+			if (customerAccountOpt.isPresent()) {
+				CustomerAccount customerAccount = customerAccountOpt.get();
+				double remBalance = customerAccount.getBalance();
 				LocalDate joiningDate = customer.getJoiningTime();
 				LocalDate today = LocalDate.now();
-
 				long daysSinceJoining = ChronoUnit.DAYS.between(joiningDate, today);
 
 				if (daysSinceJoining >= 180) {
 					if (withdrawAmount <= remBalance) {
-						double amount = remBalance - withdrawAmount;
-						CustomerAccount customerAccount1 = new CustomerAccount();
-						customerAccount1.setBalance(amount);
-						customerAccountNumberRepository.save(customerAccount1);
-						return ResponseEntity.ok("Customer has been active for at least 180 days.");
+						double updatedBalance = remBalance - withdrawAmount;
+						customerAccount.setBalance(updatedBalance);
+						customer.setJoiningTime(LocalDate.now());
+						customerAccountNumberRepository.save(customerAccount);
+						return ResponseEntity.ok("Withdrawal successful. Updated balance: " + updatedBalance);
 					} else {
-						return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Amount Entered is Invalid");
+						return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Insufficient Balance");
 					}
-				} else if (daysSinceJoining < 180) {
-
-					return ResponseEntity.ok("Customer is not active for 180 days yet.");
 				} else {
+					if (withdrawAmount <= remBalance) {
 
+						// Deduct 2% when withdrawing before 6 months
+						double percentDeduction = remBalance * 0.02;
+						double updatedBalance = remBalance - withdrawAmount - percentDeduction;
+//		                    updatedBalance -= percentDeduction;
+
+						customerAccount.setBalance(updatedBalance);
+						customer.setJoiningTime(LocalDate.now());
+						customerAccountNumberRepository.save(customerAccount);
+
+						return ResponseEntity.ok("Deduction of 2% for withdrawing before 6 months. Updated balance: "
+								+ updatedBalance + " Deduction Amount:" + percentDeduction);
+					} else {
+						return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Insufficient Balance");
+					}
 				}
 			} else {
 				return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Customer Account not found");
@@ -249,7 +331,6 @@ public class CustomerService {
 		} else {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Customer not found");
 		}
-		return null;
 
 	}
 }
