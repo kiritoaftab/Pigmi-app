@@ -34,4 +34,7 @@ public class CustomerAccountDao {
     public List<CustomerAccount> getAllAccounts(){
         return customerAccountNumberRepository.findAll();
     }
+    public Optional<CustomerAccount> fetchByAccountNumber(String accountNumber){
+        return customerAccountNumberRepository.findByAccountNumber(accountNumber);
+    }
 }

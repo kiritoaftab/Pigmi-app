@@ -2,6 +2,7 @@ com\ot\pigmy\controller\AdminPasswordResetController.class
 com\ot\pigmy\dto\CustomerIdGenerator.class
 com\ot\pigmy\exception\IdNotFoundException.class
 com\ot\pigmy\service\CustomerService.class
+com\ot\pigmy\dto\AccountNumberResp.class
 com\ot\pigmy\repository\AdminRepository.class
 com\ot\pigmy\service\AgentService.class
 com\ot\pigmy\controller\CustomerController.class
