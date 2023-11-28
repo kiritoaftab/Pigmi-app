@@ -1,5 +1,6 @@
 package com.ot.pigmy.dao;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,5 +29,10 @@ public class CustomerAccountDao {
         }else{
             return null;
         }
+    }
+
+    public List<CustomerAccount> getAllAccounts(){
+        List<CustomerAccount> customerAccountList = customerAccountNumberRepository.findAll();
+        return customerAccountList;
     }
 }

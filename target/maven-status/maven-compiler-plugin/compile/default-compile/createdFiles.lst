@@ -26,6 +26,7 @@ com\ot\pigmy\dao\CustomerDao.class
 com\ot\pigmy\PigmyApplication.class
 com\ot\pigmy\dto\CustomerAccount.class
 com\ot\pigmy\util\Encryption.class
+com\ot\pigmy\controller\CustomerAccountController.class
 com\ot\pigmy\util\MyConfig.class
 com\ot\pigmy\exception\UserStatusIsOffline.class
 com\ot\pigmy\controller\AdminController.class
@@ -37,6 +38,7 @@ com\ot\pigmy\controller\TransactionController.class
 com\ot\pigmy\repository\CustomerRepository.class
 com\ot\pigmy\dto\Admin.class
 com\ot\pigmy\repository\AgentRepository.class
+com\ot\pigmy\service\CustomerAccountService.class
 com\ot\pigmy\exception\PhoneNumberNotFoundException.class
 com\ot\pigmy\controller\AgentController.class
 com\ot\pigmy\dto\request\AddAccount.class
