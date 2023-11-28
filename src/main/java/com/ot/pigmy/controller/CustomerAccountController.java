@@ -27,8 +27,7 @@ public class CustomerAccountController {
     @ApiOperation(value = "Get All Accounts", notes = "returns all accounts")
     @ApiResponses(value = { @ApiResponse(code = 200, message = "All Accounts data"),
             @ApiResponse(code = 409, message = "No accounts ") })
-    @GetMapping(value = "/fetchAccounts", consumes = { MediaType.APPLICATION_JSON_VALUE }, produces = {
-            MediaType.APPLICATION_JSON_VALUE })
+    @GetMapping(value = "/fetchAccounts")
     public ResponseEntity<ResponseStructure<List<CustomerAccount>>> fetchAccounts() {
         return customerAccountService.getAllAccounts();
     }
