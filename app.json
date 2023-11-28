@@ -14,11 +14,11 @@
         "origin": false
       },
       "eas": {
-        "projectId": "e2abd9aa-ebbb-478b-9087-e75c3afe78d7"
+        "projectId": "eceda1fc-598a-4fd4-8145-9e66849d2b48"
       }
     },
     "android": {
-      "package": "com.vibrant21.pigmiapp"
+      "package": "com.kiritoaftab.pigmiapp"
     }
   }
 }
