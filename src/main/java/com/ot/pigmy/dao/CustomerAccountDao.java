@@ -32,7 +32,6 @@ public class CustomerAccountDao {
     }
 
     public List<CustomerAccount> getAllAccounts(){
-        List<CustomerAccount> customerAccountList = customerAccountNumberRepository.findAll();
-        return customerAccountList;
+        return customerAccountNumberRepository.findAll();
     }
 }

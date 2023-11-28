@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/agent")
+@RequestMapping("/accounts")
 @CrossOrigin(origins = "*")
 public class CustomerAccountController {
 
@@ -27,7 +27,7 @@ public class CustomerAccountController {
     @ApiOperation(value = "Get All Accounts", notes = "returns all accounts")
     @ApiResponses(value = { @ApiResponse(code = 200, message = "All Accounts data"),
             @ApiResponse(code = 409, message = "No accounts ") })
-    @PostMapping(value = "/fetchAccounts", consumes = { MediaType.APPLICATION_JSON_VALUE }, produces = {
+    @GetMapping(value = "/fetchAccounts", consumes = { MediaType.APPLICATION_JSON_VALUE }, produces = {
             MediaType.APPLICATION_JSON_VALUE })
     public ResponseEntity<ResponseStructure<List<CustomerAccount>>> fetchAccounts() {
         return customerAccountService.getAllAccounts();
