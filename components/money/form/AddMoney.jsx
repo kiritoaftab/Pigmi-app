@@ -43,7 +43,7 @@ const AddMoney = ({ user }) => {
   };
 
   const txnApiCall = async (txnData) => {
-    const url = BASE_URL + "/transaction/save";
+    const url = BASE_URL + "transaction/save";
     try {
       const response = await axios.post(url, txnData);
       router.push(`/txn/${response?.data?.data?.transaction?.id}`);
