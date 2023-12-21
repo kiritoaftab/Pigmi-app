@@ -45,6 +45,7 @@ const AddMoney = ({ user }) => {
   const txnApiCall = async (txnData) => {
     const url = BASE_URL + "transaction/save";
     try {
+      console.log(`Transaction req body ${JSON.stringify(txnData)}`)
       const response = await axios.post(url, txnData);
       router.push(`/txn/${response?.data?.data?.transaction?.id}`);
     } catch (error) {
@@ -58,15 +59,15 @@ const AddMoney = ({ user }) => {
     if (mode) {
       const txnData = {
         accountNumber:
-          Array.isArray(user?.customerAccount) &&
-          user.customerAccount?.length > 0
-            ? user.customerAccount[0]?.accountNumber
-            : "",
+          selectedAccount?.accountNumber
+            ,
         accountType:
-          Array.isArray(user?.customerAccount) &&
-          user.customerAccount?.length > 0
-            ? user.customerAccount[0]?.accountType
-            : "",
+          
+            selectedAccount?.accountType
+            ,
+        accountCode:
+             selectedAccount?.accountCode
+             ,
         agentId: user?.agentId,
         amount: parseInt(amount),
         customerId: user?.customerId,
@@ -170,10 +171,10 @@ const AddMoney = ({ user }) => {
                   <Text style={styles.radioText}>RD</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
-                  onPress={() => handleAccountTypeChange("dd")}
+                  onPress={() => handleAccountTypeChange("DD")}
                   style={[
                     styles.radioButton,
-                    selectedAccountType === "dd" && styles.radioButtonSelected,
+                    selectedAccountType === "DD" && styles.radioButtonSelected,
                   ]}
                 >
                   <Text style={styles.radioText}>DD</Text>
@@ -186,10 +187,10 @@ const AddMoney = ({ user }) => {
               {selectedAccount && (
                 <>
                   <Text style={styles.accountNumber}>
-                    {selectedAccount.accountNumber}
+                   Account Number: {selectedAccount.accountNumber}
                   </Text>
                   <Text style={styles.accountType}>
-                    {selectedAccount.accountType}
+                   Account Type: {selectedAccount.accountType}
                   </Text>
                   <Text style={styles.balance}>
                     Rs. {selectedAccount.balance}
@@ -197,8 +198,9 @@ const AddMoney = ({ user }) => {
                 </>
               )}
             </View>
+            {/* <Text>{JSON.stringify(selectedAccount)}</Text> */}
 
-            {selectedAccountType === "dd" && (
+            {/* {selectedAccountType === "dd" && (
               <View style={styles.accountNumberWrap}>
                 <Text style={styles.accNumHead}>DD Account Details</Text>
                 {selectedAccount && (
@@ -234,7 +236,7 @@ const AddMoney = ({ user }) => {
                   </>
                 )}
               </View>
-            )}
+            )} */}
 
             <View style={styles.payWrapper}>
               <View style={styles.upiContainer}>
