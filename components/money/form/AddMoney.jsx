@@ -27,7 +27,7 @@ const AddMoney = ({ user }) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [amount, setAmount] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [selectedAccountType, setSelectedAccountType] = useState("savings");
+  const [selectedAccountType, setSelectedAccountType] = useState("SAVINGS");
   const [selectedAccount, setSelectedAccount] = useState(null);
 
   const handleAccountTypeChange = (type) => {
@@ -47,9 +47,11 @@ const AddMoney = ({ user }) => {
     try {
       console.log(`Transaction req body ${JSON.stringify(txnData)}`)
       const response = await axios.post(url, txnData);
+      setIsLoading(false);
       router.push(`/txn/${response?.data?.data?.transaction?.id}`);
     } catch (error) {
       console.log(JSON.stringify(error) + " while fetching transaction");
+      setIsLoading(false);
       alert("There is an error");
     }
   };
@@ -74,6 +76,7 @@ const AddMoney = ({ user }) => {
         mode: mode,
         status: true,
       };
+      setIsLoading(true);
       txnApiCall(txnData);
     }
   };
@@ -141,36 +144,7 @@ const AddMoney = ({ user }) => {
             <View style={styles.accountTypeSelection}>
               <Text style={styles.accountTypeLabel}>Account Type</Text>
               <View style={styles.radioGroup}>
-                <TouchableOpacity
-                  onPress={() => handleAccountTypeChange("savings")}
-                  style={[
-                    styles.radioButton,
-                    selectedAccountType === "savings" &&
-                      styles.radioButtonSelected,
-                  ]}
-                >
-                  <Text style={styles.radioText}>Savings</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={() => handleAccountTypeChange("Umra")}
-                  style={[
-                    styles.radioButton,
-                    selectedAccountType === "Umra" &&
-                      styles.radioButtonSelected,
-                  ]}
-                >
-                  <Text style={styles.radioText}>Umra</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={() => handleAccountTypeChange("rd")}
-                  style={[
-                    styles.radioButton,
-                    selectedAccountType === "rd" && styles.radioButtonSelected,
-                  ]}
-                >
-                  <Text style={styles.radioText}>RD</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
+              <TouchableOpacity
                   onPress={() => handleAccountTypeChange("DD")}
                   style={[
                     styles.radioButton,
@@ -179,6 +153,36 @@ const AddMoney = ({ user }) => {
                 >
                   <Text style={styles.radioText}>DD</Text>
                 </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => handleAccountTypeChange("SAVINGS")}
+                  style={[
+                    styles.radioButton,
+                    selectedAccountType === "SAVINGS" &&
+                      styles.radioButtonSelected,
+                  ]}
+                >
+                  <Text style={styles.radioText}>Savings</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => handleAccountTypeChange("UMRAH")}
+                  style={[
+                    styles.radioButton,
+                    selectedAccountType === "UMRAH" &&
+                      styles.radioButtonSelected,
+                  ]}
+                >
+                  <Text style={styles.radioText}>Umra</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => handleAccountTypeChange("RD")}
+                  style={[
+                    styles.radioButton,
+                    selectedAccountType === "RD" && styles.radioButtonSelected,
+                  ]}
+                >
+                  <Text style={styles.radioText}>RD</Text>
+                </TouchableOpacity>
+                
               </View>
             </View>
 

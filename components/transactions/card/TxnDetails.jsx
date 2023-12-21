@@ -1,12 +1,21 @@
-import { View, Text, Image, TouchableOpacity } from "react-native";
+import { View, Text, Image, TouchableOpacity,Linking } from "react-native";
 import styles from "./txnDetails.styles";
 import { formatIndianRupee } from "../../../utils";
  import { useRouter } from "expo-router";
  import useTransaction from "../../../hook/useTransaction";   
- import { images } from "../../../constants";
+ import { BASE_URL, images } from "../../../constants";
+import axios from "axios";
+import { useEffect, useState } from "react";
 
- const TxnDetails = ({ user, txnId,data }) => {
-  const { data: txnData, isLoading, error } = useTransaction(txnId);
+ const TxnDetails = ({ user, txnId,data,s3PdfUrl }) => {
+  // const { data: txnData, isLoading, error, s3PdfUrl } = useTransaction(txnId);
+  console.log(`Showing ${JSON.stringify(data)} with ${s3PdfUrl}`)
+  const handlePrint = () => {
+    console.log(`Opening ${s3PdfUrl}`)
+    Linking.openURL(s3PdfUrl);
+    router.push(`/home/${data?.agentId}`);
+  }
+
   const router = useRouter();
   return (
     <View style={styles.container}>
@@ -67,7 +76,7 @@ import { formatIndianRupee } from "../../../utils";
             />
           </View>
         </View> 
-        <TouchableOpacity style={styles.printWrapper} onPress={() => router.push('/')}>
+        <TouchableOpacity style={styles.printWrapper} onPress={() => handlePrint()}>
           <Text style={styles.print}>PRINT</Text>
         </TouchableOpacity>
       </View>

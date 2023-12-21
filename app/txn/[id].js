@@ -10,7 +10,7 @@ const Transaction = () => {
     const params = useGlobalSearchParams();
     console.log(params);
 
-    const { data, isLoading, error, refetch } = useTransaction(params?.id);
+    const { data, isLoading, error, s3PdfUrl, refetch } = useTransaction(params?.id);
     console.log("DATA" + JSON.stringify(data));
     const user ={
         name:"Aftab Ahmed",
@@ -45,11 +45,12 @@ const Transaction = () => {
                     }}
                 />
                 <TopTxnBanner/>
-                <Text>{JSON.stringify("DATA" + data)}</Text>
+                
                 <TxnDetails 
                     data={data}
                     user={user}
                     txn={txn}
+                    s3PdfUrl={s3PdfUrl}
                 />
        </SafeAreaView>
     )
