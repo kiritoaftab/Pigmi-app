@@ -51,9 +51,9 @@ const Start = () => {
                     width:"80%",
                     alignItems:"center",
                     alignSelf:"center",
-                    height:"100%",
+                    height:"80%",
                     borderRadius:30,
-                    paddingBottom:SIZES.xxLarge,
+                    paddingBottom:100
                 }}>
                     
                     <AddPigmi 

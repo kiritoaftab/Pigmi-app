@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
         flexDirection:"row",
         alignItems:"baseline",
         gap:20,
-        height:"100%",
+        height:"50%",
     },
     icon:{
         height:20,
@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
         flex:1,
         flexDirection:"column",
         // columnGap:10,
-        
+
         
     },
     imageContainer:{
