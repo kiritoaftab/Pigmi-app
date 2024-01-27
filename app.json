@@ -9,6 +9,7 @@
     ],
     "name": "Daily Deposit",
     "slug": "Daily Deposit",
+    "icon":"./assets/images/applogo.png",
     "extra": {
       "router": {
         "origin": false
@@ -17,8 +18,15 @@
         "projectId": "eceda1fc-598a-4fd4-8145-9e66849d2b48"
       }
     },
+    "ios":{
+      "supportsTablet":true
+    },
     "android": {
-      "package": "com.kiritoaftab.pigmiapp"
+      "package": "com.kiritoaftab.pigmiapp",
+      "adaptiveIcon":{
+        "foregroundImage":"./assets/images/applogo.png",
+        "backgroundColor":"#ffffff"
+      }
     }
   }
 }
