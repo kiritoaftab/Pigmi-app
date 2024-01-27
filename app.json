@@ -7,8 +7,8 @@
     "plugins": [
       "expo-router"
     ],
-    "name": "pigmi-app",
-    "slug": "pigmi-app",
+    "name": "Daily Deposit",
+    "slug": "Daily Deposit",
     "extra": {
       "router": {
         "origin": false
