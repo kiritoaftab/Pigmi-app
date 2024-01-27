@@ -20,16 +20,21 @@ const pigmi = (agentId) => {
 
     const callSearchApi = async(searchText) => {
         if(searchText){
-            console.log(`Searching for ${searchText},${params.id}`)
-            const res = await axios.get(`${BASE_URL}customer/verifyAgentIdAndCustomerName`,{
-                params:{
-                    agentId:params.id,
-                    query:searchText
-                }
-            })
+            console.log(`Searching for ${searchText},${params.id}`);
+            try {
+                const res = await axios.get(`${BASE_URL}customer/verifyAgentIdAndCustomerName`,{
+                    params:{
+                        agentId:params.id,
+                        query:searchText
+                    }
+                })
+                
+                console.log(res); 
+                setData(res?.data?.data);
+            } catch (error) {
+                alert('No customer found')
+            }
             
-            console.log(res);
-            setData(res?.data?.data);
         }
         
     }
