@@ -3,8 +3,10 @@ import styles from "./Topbanner.styles";
 import { COLORS, icons, images, SIZES } from "../../../constants";
 import { useState } from "react";
 
-const Topbanner = () => {
+const Topbanner = ({setSearchQuery, setPerformSearch, callSearchApi}) => {
   const [searchTerm, setSearchTerm] = useState(null);
+
+
   return (
     <View style={styles.container}>
       <View style={styles.bankHeaderWrapper}>
@@ -24,7 +26,9 @@ const Topbanner = () => {
           />
         </View>
 
-        <TouchableOpacity style={styles.searchBtn}>
+        <TouchableOpacity style={styles.searchBtn} 
+            onPress={()=>callSearchApi(searchTerm)}
+        >
           <Image
             source={icons.search}
             resizeMode="contain"

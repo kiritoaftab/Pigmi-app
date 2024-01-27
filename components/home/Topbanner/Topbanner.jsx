@@ -19,7 +19,7 @@ const Topbanner = (agent) => {
       <View style={styles.agentWrapper}>
                 <View style={styles.profileImageWrapper}>
                     <Image 
-                        source={images.profile}
+                        src={agent?.agent?.agentProfileImage}
                         resizeMode="cover"
                         style={styles.profileImage}
                     />

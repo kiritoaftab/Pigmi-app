@@ -20,13 +20,13 @@ import { useEffect, useState } from "react";
   return (
     <View style={styles.container}>
       <View style={styles.customerWrapper}>
-        <View style={styles.imgWrapper}>
+        {/* <View style={styles.imgWrapper}>
           <Image
-            source={images.profile}
+            source={{ uri: data?.customerProfilePic }}
             resizeMode="contain"
             style={styles.img}
           />
-        </View>
+        </View> */}
         <View style={styles.contentWrapper}>
           <Text style={styles.nameText}>{data.customerName}</Text>
           <Text style={styles.customerId}>Customer Id: {data.customerId}</Text>

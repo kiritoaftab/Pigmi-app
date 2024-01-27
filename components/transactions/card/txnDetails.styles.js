@@ -36,9 +36,9 @@ const styles = StyleSheet.create({
         marginVertical:3,
     },
     formWrapper:{
-        height:"80%",
+        height:"100%",
         borderRadius:30,
-        borderWidth:0.2,
+        // borderWidth:0.2,
         padding:SIZES.large,
         
         
@@ -51,13 +51,11 @@ const styles = StyleSheet.create({
     dateHeading:{
         fontFamily:FONT.bold,
         fontSize:SIZES.medium,
-        
     },
     dateInputWrapper:{
-        
         alignItems:"center",
-       
     },
+
     dateInput:{
         fontFamily:FONT.medium,
     },

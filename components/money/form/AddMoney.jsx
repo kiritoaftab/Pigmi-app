@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
-  Image,
+  Linking,
   TouchableOpacity,
   TextInput,
   KeyboardAvoidingView,
@@ -10,6 +10,9 @@ import {
   TouchableWithoutFeedback,
   Modal,
   Keyboard,
+  ScrollView,
+  FlatList,
+  Image,
 } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { useRouter } from "expo-router";
@@ -17,10 +20,12 @@ import axios from "axios";
 import styles from "./addmoney.styles";
 import { BASE_URL, images } from "../../../constants";
 import { ActivityIndicator } from "react-native-paper";
+// import { CookieJar } from 'react-native-cookies';
 
 const AddMoney = ({ user }) => {
   const router = useRouter();
 
+  const [agentId, setAgentId] = useState(null);
   const [date, setDate] = useState(new Date());
   const [show, setShow] = useState(false);
   const [txnId, setTxnId] = useState(null);
@@ -29,6 +34,8 @@ const AddMoney = ({ user }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [selectedAccountType, setSelectedAccountType] = useState("SAVINGS");
   const [selectedAccount, setSelectedAccount] = useState(null);
+  const [isUpiButtonDisabled, setIsUpiButtonDisabled] = useState(false);
+  const [isCashButtonDisabled, setIsCashButtonDisabled] = useState(false);
 
   const handleAccountTypeChange = (type) => {
     setSelectedAccount(
@@ -37,10 +44,48 @@ const AddMoney = ({ user }) => {
     setSelectedAccountType(type);
   };
 
+  
+
+  // useEffect(() => {
+  //   // Function to retrieve agentId from cookies when the component mounts
+  //   const getAgentIdFromCookies = async () => {
+  //     try {
+  //       const cookies = await CookieManager.get(BASE_URL);
+
+  //       // Extract agentId from cookies
+  //       const agentIdCookie = cookies.agentId;
+  //       if (agentIdCookie) {
+  //         setAgentId(agentIdCookie);
+  //       }
+  //     } catch (error) {
+  //       console.log(error);
+  //       // Handle error if needed
+  //     }
+  //   };
+
+  //   getAgentIdFromCookies(); // Call the function when the component mounts
+  // }, []);
+
   const onChange = (e, selectedDate) => {
     setDate(selectedDate);
     setShow(false);
   };
+
+ 
+
+  // const beforeCallApi= async (txnData)=>{
+    
+  //   // console.log(`Transaction req body ${JSON.stringify(txnData.customerId, txnData.agentId, txnData.accountNumber)}`)
+  //   const url = BASE_URL + `transaction/fetchTransactionStatus/${txnData.customerId}/${txnData.agentId}/${txnData.accountNumber}`;
+  //   try {
+  //     const response = await axios.post(url)
+  //     console.log(txnData.customerId, txnData.agentId, txnData.accountNumber)
+  //     console.log(response)
+
+  //   } catch (error) {
+      
+  //   }
+  // }
 
   const txnApiCall = async (txnData) => {
     const url = BASE_URL + "transaction/save";
@@ -52,24 +97,38 @@ const AddMoney = ({ user }) => {
     } catch (error) {
       console.log(JSON.stringify(error) + " while fetching transaction");
       setIsLoading(false);
-      alert("There is an error");
+      if (error.response && error.response.status === 409){
+
+
+
+        alert("Transaction Already completed for the day");
+        
+      }
     }
   };
 
   const handleTransaction = (mode) => {
+    if (!amount || amount < 1) {
+      setIsModalVisible(false);
+      alert("Please enter amount");
+    } else  {
+
+    
+
     setIsModalVisible(false);
     if (mode) {
       const txnData = {
         accountNumber:
-          selectedAccount?.accountNumber
-            ,
+          selectedAccount?.accountNumber,
+
         accountType:
           
-            selectedAccount?.accountType
-            ,
+            selectedAccount?.accountType,
+
         accountCode:
-             selectedAccount?.accountCode
-             ,
+
+             selectedAccount?.accountCode,
+
         agentId: user?.agentId,
         amount: parseInt(amount),
         customerId: user?.customerId,
@@ -78,14 +137,56 @@ const AddMoney = ({ user }) => {
       };
       setIsLoading(true);
       txnApiCall(txnData);
+      
+     
     }
+  }
+  };
+
+  const checkTransaction =()=>{
+    console.log(selectedAccount?.accountNumber, user?.customerId ,user?.agentId)
+    axios.get(`${BASE_URL}transaction/fetchTransactionStatus/${user?.customerId}/${user?.agentId}/${selectedAccount?.accountNumber}`)
+    .then((response)=>{
+      console.log(response.data)
+      if(response.data === false){
+        setIsCashButtonDisabled(true)
+        setIsUpiButtonDisabled(true)
+        alert('Transaction is Completed For The Day For This Account')
+      }
+
+    }).catch(err=>{
+      console.log(err)
+      
+    })
+    
+  }
+
+  useEffect(()=>{
+    checkTransaction()
+  },[selectedAccount])
+
+  const handlePhoneClick = (phoneNumber) => {
+    const url = `tel:${phoneNumber}`;
+    Linking.canOpenURL(url)
+      .then((supported) => {
+        if (supported) {
+          return Linking.openURL(url);
+        } else {
+          console.log("Phone dialer not supported");
+        }
+      })
+      .catch((error) => console.error("An error occurred", error));
   };
 
   const handleUpi = () => {
-    if (!amount || amount < 1) {
+
+    if (selectedAccount === null) {
+      setIsModalVisible(false);
+      alert("Please select Account");
+    } else if (!amount || amount < 1) {
       setIsModalVisible(false);
       alert("Please enter amount");
-    } else {
+    } else  {
       setIsModalVisible(true);
     }
   };
@@ -101,24 +202,28 @@ const AddMoney = ({ user }) => {
         <View style={styles.container}>
           <View style={styles.customerWrapper}>
             <View style={styles.imgWrapper}>
-              <Image
-                source={images.profile}
-                resizeMode="contain"
-                style={styles.img}
-              />
+            <Image
+                  src={user.customerProfilePic}
+                  resizeMode="contain"
+                  style={styles.img}
+                />
             </View>
+
+            
             <View style={styles.contentWrapper}>
               <Text style={styles.nameText}>{user.name}</Text>
               <Text style={styles.customerId}>
                 Customer Id: {user.customerId}
               </Text>
               <Text style={styles.address}>{user.address}</Text>
-              <Text style={styles.phone}>{user.phone}</Text>
+              <TouchableOpacity onPress={() => handlePhoneClick(user.phone)}>
+                <Text style={styles.phone}>{user.phone}</Text>
+              </TouchableOpacity>
             </View>
           </View>
           <View style={styles.formWrapper}>
             <View style={styles.topRow}>
-              <View style={styles.dateWrapper}>
+              <View style={styles.amtWrapper}>
                 <Text style={styles.dateHeading}>Date</Text>
                 <TouchableOpacity
                   onPress={() => setShow(true)}
@@ -131,57 +236,43 @@ const AddMoney = ({ user }) => {
                   )}`}</Text>
                 </TouchableOpacity>
               </View>
-              {show && (
+              {/* {show && (
                 <DateTimePicker
                   value={date}
                   onChange={onChange}
                   mode="date"
                   is24Hour={true}
                 />
-              )}
+              )} */}
             </View>
 
             <View style={styles.accountTypeSelection}>
               <Text style={styles.accountTypeLabel}>Account Type</Text>
               <View style={styles.radioGroup}>
-              <TouchableOpacity
-                  onPress={() => handleAccountTypeChange("DD")}
-                  style={[
-                    styles.radioButton,
-                    selectedAccountType === "DD" && styles.radioButtonSelected,
-                  ]}
-                >
-                  <Text style={styles.radioText}>DD</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={() => handleAccountTypeChange("SAVINGS")}
-                  style={[
-                    styles.radioButton,
-                    selectedAccountType === "SAVINGS" &&
-                      styles.radioButtonSelected,
-                  ]}
-                >
-                  <Text style={styles.radioText}>Savings</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={() => handleAccountTypeChange("UMRAH")}
-                  style={[
-                    styles.radioButton,
-                    selectedAccountType === "UMRAH" &&
-                      styles.radioButtonSelected,
-                  ]}
-                >
-                  <Text style={styles.radioText}>Umra</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={() => handleAccountTypeChange("RD")}
-                  style={[
-                    styles.radioButton,
-                    selectedAccountType === "RD" && styles.radioButtonSelected,
-                  ]}
-                >
-                  <Text style={styles.radioText}>RD</Text>
-                </TouchableOpacity>
+                <ScrollView>
+                <FlatList
+                      horizontal
+                      data={user.customerAccount}
+                      keyExtractor={(item) => item.accountNumber.toString()}
+                      renderItem={({ item }) => (
+                        <TouchableOpacity
+                          onPress={() => handleAccountTypeChange(item.accountType)
+                            
+                          }
+                          
+                          style={[
+                            styles.radioButton,
+                            selectedAccountType === item.accountType && styles.radioButtonSelected,
+                          ]}
+                          
+                        >
+                          <Text style={styles.radioText}>{item.accountType}</Text>
+                          
+                        </TouchableOpacity>
+                      )}
+                    />
+                </ScrollView>
+              
                 
               </View>
             </View>
@@ -190,6 +281,8 @@ const AddMoney = ({ user }) => {
               <Text style={styles.accNumHead}>Account Details</Text>
               {selectedAccount && (
                 <>
+                
+                  
                   <Text style={styles.accountNumber}>
                    Account Number: {selectedAccount.accountNumber}
                   </Text>
@@ -202,50 +295,14 @@ const AddMoney = ({ user }) => {
                 </>
               )}
             </View>
-            {/* <Text>{JSON.stringify(selectedAccount)}</Text> */}
-
-            {/* {selectedAccountType === "dd" && (
-              <View style={styles.accountNumberWrap}>
-                <Text style={styles.accNumHead}>DD Account Details</Text>
-                {selectedAccount && (
-                  <>
-                    <Text style={styles.accountNumber}>
-                      {selectedAccount.accountNumber}
-                    </Text>
-                    <Text style={styles.accountType}>
-                      {selectedAccount.accountType}
-                    </Text>
-                    <Text style={styles.balance}>
-                      Rs. {selectedAccount.balance}
-                    </Text>
-                  </>
-                )}
-              </View>
-            )}
-
-            {selectedAccountType === "Umra" && (
-              <View style={styles.accountNumberWrap}>
-                <Text style={styles.accNumHead}>Umra Account Details</Text>
-                {selectedAccount && (
-                  <>
-                    <Text style={styles.accountNumber}>
-                      {selectedAccount.accountNumber}
-                    </Text>
-                    <Text style={styles.accountType}>
-                      {selectedAccount.accountType}
-                    </Text>
-                    <Text style={styles.balance}>
-                      Rs. {selectedAccount.balance}
-                    </Text>
-                  </>
-                )}
-              </View>
-            )} */}
+            
 
             <View style={styles.payWrapper}>
               <View style={styles.upiContainer}>
                 <Text style={styles.upiLabel}>UPI</Text>
-                <TouchableOpacity style={styles.upiWrapper} onPress={handleUpi}>
+                <TouchableOpacity
+                 style={styles.upiWrapper} onPress={handleUpi}
+                 disabled={isUpiButtonDisabled}>
                   <Text style={styles.upi}>Scanner</Text>
                 </TouchableOpacity>
               </View>
@@ -254,6 +311,7 @@ const AddMoney = ({ user }) => {
                 <TouchableOpacity
                   style={styles.upiWrapper}
                   onPress={() => handleTransaction("CASH")}
+                  disabled={isCashButtonDisabled}
                 >
                   <Text style={styles.upi}>Paid</Text>
                 </TouchableOpacity>
@@ -278,7 +336,9 @@ const AddMoney = ({ user }) => {
           >
             <View style={styles.modalView}>
               <Text style={styles.header}>UPI Scanner</Text>
-              <View style={styles.upiScannerWrapper}>
+              <View
+               style={styles.upiScannerWrapper
+              }>
                 <Image
                   source={images.upiScanner}
                   style={styles.upiImg}

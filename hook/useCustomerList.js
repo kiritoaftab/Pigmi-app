@@ -42,7 +42,7 @@ const useCustomerList = (agentId) => {
         fetchData();
       }
       
-      return {data, isLoading, error, refetch}
+      return {data, isLoading, error, refetch,setData}
 }
 
 export default useCustomerList;

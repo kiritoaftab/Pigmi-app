@@ -10,7 +10,7 @@ import styles from "./loginform.styles";
 import axios from "axios";
 import { COLORS, icons, images, SIZES, BASE_URL } from "../../constants";
 import { useState } from "react";
-
+// import { CookieJar } from 'react-native-cookies';
 import { Stack, useRouter } from "expo-router";
 
 const LoginForm = () => {
@@ -25,6 +25,8 @@ const LoginForm = () => {
   const [error, setError] = useState(null);
   const [otp, setOtp] = useState(null);
 
+  // const cookieJar = new CookieJar();
+
   const loginApiCall = async (email, password) => {
     const url = BASE_URL + "agent/agentLogin/email/" + email + "/" + password;
 
@@ -32,14 +34,16 @@ const LoginForm = () => {
       const response = await axios.get(url);
       console.log(response);
       setData(response.data.data);
+      // cookieJar.setCookieSync(`agentId=${agentData.id}`, BASE_URL);
+      // cookieJar.setCookieSync(`accessToken=${agentData.accessToken}`, BASE_URL);
       setIsLoading(false);
       console.log(data);
       setIsModalVisible(true);
     } catch (error) {
       console.log(error);
-      setError(error);
+      // setError(error);
       setIsModalVisible(false);
-      alert("There is an error");
+      alert("inavlid Email or password");
     } finally {
       setIsLoading(false);
     }
@@ -77,10 +81,10 @@ const LoginForm = () => {
 
     } catch (error) {
       console.log(error);
-      setError(error);
-      setIsModalVisible(false);
-      alert("There is an error");
-      router.push('/')
+      // setError(error);
+      setIsModalVisible(true);
+      alert("Invalid Otp");
+      // router.push('/')
     } finally {
       setIsLoading(false);
     }
@@ -88,6 +92,7 @@ const LoginForm = () => {
 
   const handleOtp = () => {
     if (otp && otp.length === 4) {
+      
       setIsLoading(true);
       otpApiCall(otp);
     } else {

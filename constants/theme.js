@@ -17,6 +17,7 @@ const COLORS = {
   black:"#292E28",
   gray3:"#656161",
   skyBlue:"#1DA1F2",
+  
 
   
 };

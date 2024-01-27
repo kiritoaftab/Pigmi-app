@@ -43,13 +43,13 @@ const styles = StyleSheet.create({
     },
     phone:{
         fontFamily:FONT.medium,
-        fontSize:10,
+        fontSize:15,
         marginVertical:2,
     },
     formWrapper:{
-        height:"60%",
+        height:"50%",
         borderRadius:30,
-        borderWidth:0.2,
+        // borderWidth:0.2,
         // padding:SIZES.medium,
         flexDirection:"column"
     },
@@ -72,6 +72,8 @@ const styles = StyleSheet.create({
         paddingVertical: 8,
         paddingHorizontal: 20,
         borderRadius: 5,
+        marginRight:5,
+        marginLeft:5
     },
     radioButtonSelected: {
         backgroundColor: 'lightblue',
@@ -120,6 +122,7 @@ const styles = StyleSheet.create({
         borderWidth:1,
         borderRadius:20,
         alignSelf:"center",
+        padding:5
         // padding:SIZES.small,
     },
     amount:{
@@ -133,6 +136,7 @@ const styles = StyleSheet.create({
         alignItems:"center",
         justifyContent:"space-around"
     },
+    
     upiWrapper:{
         backgroundColor:COLORS.black,
         borderColor:COLORS.gray3,
@@ -141,6 +145,17 @@ const styles = StyleSheet.create({
         alignItems:"center",
         padding:SIZES.small,
     },
+
+    upienable:{
+        backgroundColor:COLORS.green,
+        borderColor:COLORS.gray3,
+        borderRadius:20,
+        borderWidth:1,
+        alignItems:"center",
+        padding:SIZES.small,
+    },
+
+
     upi:{
         fontFamily:FONT.light,
         color:COLORS.white
@@ -164,6 +179,7 @@ const styles = StyleSheet.create({
         height: "40%",
         justifyContent: "center",
         alignItems: "center",
+        marginTop:30
     },
     upiImg:{
         // height:250,
@@ -172,21 +188,25 @@ const styles = StyleSheet.create({
     header:{
         fontFamily:FONT.extraBold,
         fontSize:SIZES.xLarge,
+        marginBottom:10
     },
     payableAmount:{
         fontFamily:FONT.bold,
         fontSize:SIZES.large,
-        color:COLORS.green
+        color:COLORS.green,
+        marginTop:20
     },
     paymentButtonWrapper:{
         // marginVertical:SIZES.medium,
         backgroundColor:COLORS.green,
         // padding:SIZES.medium,
         borderRadius:15,
+        padding:5
     },
     paymentButton:{
         color:COLORS.white,
-        fontFamily:FONT.semiBold
+        fontFamily:FONT.semiBold,
+        
     },
     accountNumberWrap:{
         

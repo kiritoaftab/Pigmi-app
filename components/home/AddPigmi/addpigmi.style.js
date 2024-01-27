@@ -25,7 +25,8 @@ const styles = StyleSheet.create({
     customerWrapper:{
         flex:1,
         flexDirection:"column",
-        columnGap:4,
+        // columnGap:10,
+        
     },
     imageContainer:{
         paddingTop:SIZES.large,

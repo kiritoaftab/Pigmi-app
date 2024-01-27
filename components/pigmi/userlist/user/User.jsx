@@ -1,17 +1,18 @@
-import { View,Text,TouchableOpacity ,Image} from "react-native";
+import { View,Text,TouchableOpacity ,Image, ScrollView} from "react-native";
 import styles from "./user.styles";
 import {images} from "../../../../constants"
+
 
 
 const User = ({user, handleNavigate}) => {
 
     return(
+        <ScrollView>
         <TouchableOpacity style={styles.container} onPress={handleNavigate}>
-            <View
-                style={styles.profileWrapper}
+            <View style={styles.profileWrapper}
             >
                 <Image
-                    source={images.profile}
+                    src={user.customerProfilePic}
                     resizeMode="contain"
                     style={styles.profileImg}
                 />
@@ -21,6 +22,7 @@ const User = ({user, handleNavigate}) => {
                 <Text style={styles.custId}>Customer Id: {user.id}</Text>
             </View>
         </TouchableOpacity>
+        </ScrollView>
     )
 }
 export default User;
