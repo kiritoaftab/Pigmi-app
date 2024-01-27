@@ -8,7 +8,7 @@
       "expo-router"
     ],
     "name": "Daily Deposit",
-    "slug": "Daily Deposit",
+    "slug": "Daily-Deposit",
     "icon":"./assets/images/applogo.png",
     "extra": {
       "router": {
