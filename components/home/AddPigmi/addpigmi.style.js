@@ -27,6 +27,7 @@ const styles = StyleSheet.create({
         flexDirection:"column",
         // columnGap:10,
         
+        
     },
     imageContainer:{
         paddingTop:SIZES.large,
