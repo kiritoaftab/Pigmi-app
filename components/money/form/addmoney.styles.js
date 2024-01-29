@@ -13,6 +13,7 @@ const styles = StyleSheet.create({
     },
     customerWrapper:{
         flexDirection:"row",
+        width:240
     },
     imgWrapper:{
         width: 80,
@@ -29,6 +30,7 @@ const styles = StyleSheet.create({
     nameText:{
         fontFamily:FONT.extraBold,
         fontSize:20,
+        textTransform: 'capitalize',
     },
     customerId:{
         fontFamily:FONT.medium,
@@ -40,6 +42,7 @@ const styles = StyleSheet.create({
         fontSize:10,
         width:"70%",
         marginVertical:2,
+        textTransform: 'capitalize',
     },
     phone:{
         fontFamily:FONT.medium,
@@ -55,12 +58,14 @@ const styles = StyleSheet.create({
     },
     accountTypeSelection: {
         marginBottom: 20,
+        marginTop:5
     },
     accountTypeLabel: {
         // fontSize: 18,
-        // marginBottom: 10,
+        marginBottom: 5,
         // marginTop: 10,
         fontWeight: 'bold',
+        textTransform: 'capitalize',
     },
     radioGroup: {
         flexDirection: 'row',
@@ -91,6 +96,7 @@ const styles = StyleSheet.create({
     dateHeading:{
         fontFamily:FONT.extraBold,
         fontSize:SIZES.medium,
+        marginBottom:5
         
     },
     dateInputWrapper:{
@@ -122,11 +128,12 @@ const styles = StyleSheet.create({
         borderWidth:1,
         borderRadius:20,
         alignSelf:"center",
-        padding:5
+        padding:8
         // padding:SIZES.small,
     },
     amount:{
         fontFamily:FONT.semiBold,
+        textTransform: 'capitalize',
     },
     payWrapper:{
         // marginTop:SIZES.large,
@@ -216,12 +223,17 @@ const styles = StyleSheet.create({
     accNumHead:{
         fontFamily:FONT.extraBold,
         // marginTop:SIZES.small,
+        
     },
     accountNumber:{
         fontFamily:FONT.regular,
     },
     accountType:{
         fontFamily:FONT.regular,
+    },
+    contentWrapper:{
+        paddingLeft:30,
+        marginBottom:5
     }
 
 

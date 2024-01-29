@@ -23,6 +23,7 @@ const styles = StyleSheet.create({
         borderRadius: 80 /2,
         justifyContent: "center",
         alignItems: "center",
+        marginTop:-10
     },
     profileImg:{
         width: "60%",
@@ -30,13 +31,14 @@ const styles = StyleSheet.create({
         borderRadius: 100 / 1.25,
     },
     textWrapper:{
-        paddingTop:SIZES.small,
+        
         flex:1,
         flexDirection:"column",
     },
     name:{
         fontFamily:FONT.bold,
         fontSize:15,
+        textTransform: 'capitalize', 
     },
     custId:{
         fontFamily:FONT.light,

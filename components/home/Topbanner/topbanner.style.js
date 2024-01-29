@@ -46,7 +46,8 @@ const styles = StyleSheet.create({
         fontSize:SIZES.medium,
         color:COLORS.lightWhite,
         fontWeight:"200",
-        marginTop:"3%"
+        marginTop:"3%",
+        textTransform: 'capitalize',
     },
     agentText:{
         color:COLORS.white,

@@ -68,14 +68,8 @@ import { useEffect, useState } from "react";
               {data?.customerAccountBalance}
             </Text>
           </View>
-          <View style={styles.msgWrapper}>
-            <Text style={styles.msgText}>Message sent</Text>
-            <Image
-              source={Image.doubleTick}
-              resizeMode="contain"
-            />
-          </View>
-        </View> 
+            </View> 
+          
         <TouchableOpacity style={styles.printWrapper} onPress={() => handlePrint()}>
           <Text style={styles.print}>PRINT</Text>
         </TouchableOpacity>

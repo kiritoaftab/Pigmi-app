@@ -26,9 +26,9 @@ const useTransaction = (txnId) => {
         try{
           console.log(`Txn id data fetch ${JSON.stringify(txnId)}`)
           const response = await axios.request(options);
-          console.log(response.data.data);
+          // console.log(response.data.data);
           const response2 = await axios.request(options2);
-          console.log(response2.data+" For retrieving pdf")
+          // console.log(response2.data+" For retrieving pdf")
           setS3PdfUrl(response2.data);
           setData(response.data.data)
           setIsLoading(false)

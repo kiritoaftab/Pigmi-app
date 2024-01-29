@@ -10,7 +10,6 @@ import styles from "./loginform.styles";
 import axios from "axios";
 import { COLORS, icons, images, SIZES, BASE_URL } from "../../constants";
 import { useState } from "react";
-// import { CookieJar } from 'react-native-cookies';
 import { Stack, useRouter } from "expo-router";
 
 const LoginForm = () => {
@@ -25,7 +24,7 @@ const LoginForm = () => {
   const [error, setError] = useState(null);
   const [otp, setOtp] = useState(null);
 
-  // const cookieJar = new CookieJar();
+
 
   const loginApiCall = async (email, password) => {
     const url = BASE_URL + "agent/agentLogin/email/" + email + "/" + password;
@@ -34,8 +33,7 @@ const LoginForm = () => {
       const response = await axios.get(url);
       console.log(response);
       setData(response.data.data);
-      // cookieJar.setCookieSync(`agentId=${agentData.id}`, BASE_URL);
-      // cookieJar.setCookieSync(`accessToken=${agentData.accessToken}`, BASE_URL);
+     
       setIsLoading(false);
       console.log(data);
       setIsModalVisible(true);
@@ -43,13 +41,14 @@ const LoginForm = () => {
       console.log(error);
       // setError(error);
       setIsModalVisible(false);
-      alert("inavlid Email or password");
+      alert("Inavlid Email or password");
     } finally {
       setIsLoading(false);
     }
   };
 
   const handleLogin = () => {
+     
     console.log(`Email = ${email} | Password = ${password}`);
     if (!emailValidator(email)) {
       setIsModalVisible(false);

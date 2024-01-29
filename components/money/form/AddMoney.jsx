@@ -44,8 +44,6 @@ const AddMoney = ({ user }) => {
     setSelectedAccountType(type);
   };
 
-  
-
   // useEffect(() => {
   //   // Function to retrieve agentId from cookies when the component mounts
   //   const getAgentIdFromCookies = async () => {
@@ -71,10 +69,8 @@ const AddMoney = ({ user }) => {
     setShow(false);
   };
 
- 
-
   // const beforeCallApi= async (txnData)=>{
-    
+
   //   // console.log(`Transaction req body ${JSON.stringify(txnData.customerId, txnData.agentId, txnData.accountNumber)}`)
   //   const url = BASE_URL + `transaction/fetchTransactionStatus/${txnData.customerId}/${txnData.agentId}/${txnData.accountNumber}`;
   //   try {
@@ -83,26 +79,22 @@ const AddMoney = ({ user }) => {
   //     console.log(response)
 
   //   } catch (error) {
-      
+
   //   }
   // }
 
   const txnApiCall = async (txnData) => {
     const url = BASE_URL + "transaction/save";
     try {
-      console.log(`Transaction req body ${JSON.stringify(txnData)}`)
+      console.log(`Transaction req body ${JSON.stringify(txnData)}`);
       const response = await axios.post(url, txnData);
       setIsLoading(false);
       router.push(`/txn/${response?.data?.data?.transaction?.id}`);
     } catch (error) {
       console.log(JSON.stringify(error) + " while fetching transaction");
       setIsLoading(false);
-      if (error.response && error.response.status === 409){
-
-
-
+      if (error.response && error.response.status === 409) {
         alert("Transaction Already completed for the day");
-        
       }
     }
   };
@@ -111,59 +103,54 @@ const AddMoney = ({ user }) => {
     if (!amount || amount < 1) {
       setIsModalVisible(false);
       alert("Please enter amount");
-    } else  {
+    } else {
+      setIsModalVisible(false);
+      if (mode) {
+        const txnData = {
+          accountNumber: selectedAccount?.accountNumber,
 
-    
+          accountType: selectedAccount?.accountType,
 
-    setIsModalVisible(false);
-    if (mode) {
-      const txnData = {
-        accountNumber:
-          selectedAccount?.accountNumber,
+          accountCode: selectedAccount?.accountCode,
 
-        accountType:
-          
-            selectedAccount?.accountType,
-
-        accountCode:
-
-             selectedAccount?.accountCode,
-
-        agentId: user?.agentId,
-        amount: parseInt(amount),
-        customerId: user?.customerId,
-        mode: mode,
-        status: true,
-      };
-      setIsLoading(true);
-      txnApiCall(txnData);
-      
-     
+          agentId: user?.agentId,
+          amount: parseInt(amount),
+          customerId: user?.customerId,
+          mode: mode,
+          status: true,
+        };
+        setIsLoading(true);
+        txnApiCall(txnData);
+      }
     }
-  }
   };
 
-  const checkTransaction =()=>{
-    console.log(selectedAccount?.accountNumber, user?.customerId ,user?.agentId)
-    axios.get(`${BASE_URL}transaction/fetchTransactionStatus/${user?.customerId}/${user?.agentId}/${selectedAccount?.accountNumber}`)
-    .then((response)=>{
-      console.log(response.data)
-      if(response.data === false){
-        setIsCashButtonDisabled(true)
-        setIsUpiButtonDisabled(true)
-        alert('Transaction is Completed For The Day For This Account')
-      }
+  const checkTransaction = () => {
+    console.log(
+      selectedAccount?.accountNumber,
+      user?.customerId,
+      user?.agentId
+    );
+    axios
+      .get(
+        `${BASE_URL}transaction/fetchTransactionStatus/${user?.customerId}/${user?.agentId}/${selectedAccount?.accountNumber}`
+      )
+      .then((response) => {
+        console.log(response.data);
+        if (response.data === false) {
+          setIsCashButtonDisabled(true);
+          setIsUpiButtonDisabled(true);
+          alert("Transaction is Completed For The Day For This Account");
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
-    }).catch(err=>{
-      console.log(err)
-      
-    })
-    
-  }
-
-  useEffect(()=>{
-    checkTransaction()
-  },[selectedAccount])
+  useEffect(() => {
+    checkTransaction();
+  }, [selectedAccount]);
 
   const handlePhoneClick = (phoneNumber) => {
     const url = `tel:${phoneNumber}`;
@@ -179,14 +166,13 @@ const AddMoney = ({ user }) => {
   };
 
   const handleUpi = () => {
-
     if (selectedAccount === null) {
       setIsModalVisible(false);
       alert("Please select Account");
     } else if (!amount || amount < 1) {
       setIsModalVisible(false);
       alert("Please enter amount");
-    } else  {
+    } else {
       setIsModalVisible(true);
     }
   };
@@ -201,15 +187,9 @@ const AddMoney = ({ user }) => {
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={styles.container}>
           <View style={styles.customerWrapper}>
-            <View style={styles.imgWrapper}>
-            <Image
-                  src={user.customerProfilePic}
-                  resizeMode="contain"
-                  style={styles.img}
-                />
-            </View>
+           
+           {/* [id]/[type].js */}
 
-            
             <View style={styles.contentWrapper}>
               <Text style={styles.nameText}>{user.name}</Text>
               <Text style={styles.customerId}>
@@ -250,30 +230,26 @@ const AddMoney = ({ user }) => {
               <Text style={styles.accountTypeLabel}>Account Type</Text>
               <View style={styles.radioGroup}>
                 <ScrollView>
-                <FlatList
-                      horizontal
-                      data={user.customerAccount}
-                      keyExtractor={(item) => item.accountNumber.toString()}
-                      renderItem={({ item }) => (
-                        <TouchableOpacity
-                          onPress={() => handleAccountTypeChange(item.accountType)
-                            
-                          }
-                          
-                          style={[
-                            styles.radioButton,
-                            selectedAccountType === item.accountType && styles.radioButtonSelected,
-                          ]}
-                          
-                        >
-                          <Text style={styles.radioText}>{item.accountType}</Text>
-                          
-                        </TouchableOpacity>
-                      )}
-                    />
+                  <FlatList
+                    horizontal
+                    data={user.customerAccount}
+                    keyExtractor={(item) => item.accountNumber.toString()}
+                    renderItem={({ item }) => (
+                      <TouchableOpacity
+                        onPress={() =>
+                          handleAccountTypeChange(item.accountType)
+                        }
+                        style={[
+                          styles.radioButton,
+                          selectedAccountType === item.accountType &&
+                            styles.radioButtonSelected,
+                        ]}
+                      >
+                        <Text style={styles.radioText}>{item.accountType}</Text>
+                      </TouchableOpacity>
+                    )}
+                  />
                 </ScrollView>
-              
-                
               </View>
             </View>
 
@@ -281,13 +257,11 @@ const AddMoney = ({ user }) => {
               <Text style={styles.accNumHead}>Account Details</Text>
               {selectedAccount && (
                 <>
-                
-                  
                   <Text style={styles.accountNumber}>
-                   Account Number: {selectedAccount.accountNumber}
+                    Account Number: {selectedAccount.accountNumber}
                   </Text>
                   <Text style={styles.accountType}>
-                   Account Type: {selectedAccount.accountType}
+                    Account Type: {selectedAccount.accountType}
                   </Text>
                   <Text style={styles.balance}>
                     Rs. {selectedAccount.balance}
@@ -295,14 +269,15 @@ const AddMoney = ({ user }) => {
                 </>
               )}
             </View>
-            
 
             <View style={styles.payWrapper}>
               <View style={styles.upiContainer}>
                 <Text style={styles.upiLabel}>UPI</Text>
                 <TouchableOpacity
-                 style={styles.upiWrapper} onPress={handleUpi}
-                 disabled={isUpiButtonDisabled}>
+                  style={styles.upiWrapper}
+                  onPress={handleUpi}
+                  disabled={isUpiButtonDisabled}
+                >
                   <Text style={styles.upi}>Scanner</Text>
                 </TouchableOpacity>
               </View>
@@ -336,9 +311,7 @@ const AddMoney = ({ user }) => {
           >
             <View style={styles.modalView}>
               <Text style={styles.header}>UPI Scanner</Text>
-              <View
-               style={styles.upiScannerWrapper
-              }>
+              <View style={styles.upiScannerWrapper}>
                 <Image
                   source={images.upiScanner}
                   style={styles.upiImg}

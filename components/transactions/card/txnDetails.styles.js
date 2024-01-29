@@ -26,14 +26,16 @@ const styles = StyleSheet.create({
         height: "80%",
         borderRadius: 100 / 1.25,
     },
-    nameText:{
-        fontFamily:FONT.extraBold,
-        fontSize:20,
-    },
+    nameText: {
+        fontFamily: FONT.extraBold,
+        fontSize: 20,
+        textTransform: 'capitalize',
+      },
     customerId:{
         fontFamily:FONT.medium,
         fontSize:12,
         marginVertical:3,
+        textTransform: 'capitalize',
     },
     formWrapper:{
         height:"100%",
@@ -58,6 +60,7 @@ const styles = StyleSheet.create({
 
     dateInput:{
         fontFamily:FONT.medium,
+
     },
     balanceWrapper:{
         alignItems:"center",
@@ -76,7 +79,8 @@ const styles = StyleSheet.create({
         fontFamily:FONT.bold
     },
     agentName:{
-        fontFamily: FONT.regular
+        fontFamily: FONT.regular,
+        textTransform: 'capitalize',
     },
     bottomRow:{
         flex:1,
@@ -108,6 +112,7 @@ const styles = StyleSheet.create({
         width:"60%",
         justifyContent:"space-between",
         padding:SIZES.small,
+        
     },
     msgText:{
         fontFamily:FONT.light,
@@ -124,6 +129,9 @@ const styles = StyleSheet.create({
     print:{
         fontFamily:FONT.bold,
         color:COLORS.white,
+    },
+    contentWrapper:{
+        paddingLeft:20
     }
 })
 
