@@ -29,9 +29,6 @@ const Transaction = () => {
     return(
         isLoading? (
             <ActivityIndicator size={SIZES.large} color={COLORS.primary}/>
-        ) : error ? (
-            <Text>{JSON.stringify(error)}</Text>
-            //alert('There is error')
         ) :
         <SafeAreaView
             style={{flex:1,  backgroundColor:COLORS.lightGreen, alignItems:"center"}}

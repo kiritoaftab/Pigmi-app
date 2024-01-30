@@ -88,8 +88,25 @@ const AddMoney = ({ user }) => {
     try {
       console.log(`Transaction req body ${JSON.stringify(txnData)}`);
       const response = await axios.post(url, txnData);
+      console.log("txn data resp" + JSON.stringify(response.data.data));
       setIsLoading(false);
-      router.push(`/txn/${response?.data?.data?.transaction?.id}`);
+      const txnApiData = response?.data?.data?.transaction;
+      const loanApiData = response?.data?.data?.loan;
+      const allTransactions = response?.data?.data?.allTransactions;
+      console.log(txnApiData,loanApiData,allTransactions);
+
+      if (txnApiData !== null) {
+        router.push(`/txn/${txnApiData?.id}`);
+      } else if (loanApiData !== null) {
+        console.log("iam in Loan")
+        router.push(`/txn/${loanApiData?.id}`);
+      } else if(allTransactions !== null) {
+        console.log("iam in AllTransaction")
+        router.push(`/txn/${allTransactions?.id}`);
+      } else {
+    
+        console.log("No valid entity found in the response");
+      }
     } catch (error) {
       console.log(JSON.stringify(error) + " while fetching transaction");
       setIsLoading(false);
