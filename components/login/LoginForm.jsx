@@ -39,7 +39,6 @@ const LoginForm = () => {
       setIsModalVisible(true);
     } catch (error) {
       console.log(error);
-      // setError(error);
       setIsModalVisible(false);
       alert("Inavlid Email or password");
     } finally {
