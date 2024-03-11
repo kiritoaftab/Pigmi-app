@@ -24,7 +24,6 @@ const Home = () => {
           headerStyle: { backgroundColor: COLORS.green },
           headerShadowVisible: false,
           headerTitle: "",
-          
         }}
       />
       <ScrollView showsVerticalScrollIndicator={false}>

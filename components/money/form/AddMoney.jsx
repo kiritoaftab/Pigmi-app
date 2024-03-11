@@ -20,7 +20,7 @@ import axios from "axios";
 import styles from "./addmoney.styles";
 import { BASE_URL, images } from "../../../constants";
 import { ActivityIndicator } from "react-native-paper";
-// import { CookieJar } from 'react-native-cookies';
+
 
 const AddMoney = ({ user }) => {
   const router = useRouter();

@@ -27,7 +27,7 @@ const customer = () => {
                 }}
             />
             <ScrollView showsVerticalScrollIndicator={false}>
-            <View style={{
+            <View style={{ 
                     flex:1,
                     padding:SIZES.medium,
                     backgroundColor:COLORS.green, 

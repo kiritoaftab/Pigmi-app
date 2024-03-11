@@ -8,7 +8,7 @@
       "expo-router"
     ],
     "name": "Daily Deposit",
-    "slug": "Daily-Deposit",
+    "slug": "pigmi-app",
     "icon":"./assets/images/applogo.png",
     "extra": {
       "router": {
