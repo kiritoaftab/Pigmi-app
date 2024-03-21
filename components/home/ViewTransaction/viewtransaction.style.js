@@ -1,12 +1,12 @@
-import { StyleSheet } from "react-native";
-
-import {COLORS, FONT, SIZES} from "../../../constants";
+import {COLORS,FONT,SIZES} from '../../../constants'
+import { StyleSheet } from 'react-native';
 
 const styles = StyleSheet.create({
     container:{
         backgroundColor:COLORS.lightYellow,
         width:"80%",
         marginTop:"10%",
+        
         borderRadius:20,
         padding:SIZES.large
     },
@@ -17,16 +17,10 @@ const styles = StyleSheet.create({
         gap:20,
         height:"50%",
     },
-    icon:{
-        height:20,
-        width:20
-    },
     customerWrapper:{
         flex:1,
         flexDirection:"column",
-        // columnGap:10,
-
-        
+        // columnGap:10,        
     },
     imageContainer:{
         paddingTop:SIZES.large,

@@ -9,8 +9,9 @@ import {
 import styles from "./loginform.styles";
 import axios from "axios";
 import { COLORS, icons, images, SIZES, BASE_URL } from "../../constants";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Stack, useRouter } from "expo-router";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const LoginForm = () => {
   const router = useRouter();
@@ -20,10 +21,36 @@ const LoginForm = () => {
   const [password, setPassword] = useState(null);
 
   const [data, setData] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [otp, setOtp] = useState(null);
 
+  const storeData = async (value) => {
+    try {
+      await AsyncStorage.setItem('@agent_id', value)
+    } catch (e) {
+      // saving error
+      console.log(error);
+    }
+  }
+
+  const getData = async () => {
+    try {
+      const value = await AsyncStorage.getItem('@agent_id')
+      if(value !== null) {
+        console.log(value," From async storage");
+        router.push(`/home/${value}`);
+      }
+    } catch(e) {
+      console.log(e);
+    }finally{
+      setIsLoading(false);
+    }
+  }
+
+  useEffect(()=> {
+    getData();
+  },[])
 
 
   const loginApiCall = async (email, password) => {
@@ -31,12 +58,14 @@ const LoginForm = () => {
 
     try {
       const response = await axios.get(url);
-      console.log(response);
+      console.log(response.data.data);
       setData(response.data.data);
      
       setIsLoading(false);
       console.log(data);
-      setIsModalVisible(true);
+      storeData(response.data.data?.id);
+      router.push(`/home/${response.data.data?.id}`);
+      // setIsModalVisible(true);
     } catch (error) {
       console.log(error);
       // setError(error);
@@ -49,11 +78,9 @@ const LoginForm = () => {
 
   const handleLogin = () => {
      
-    console.log(`Email = ${email} | Password = ${password}`);
-    if (!emailValidator(email)) {
-      setIsModalVisible(false);
-      return;
-    } else if (!passwordValidator(password)) {
+    console.log(`Phone = ${email} | Password = ${password}`);
+    
+     if (!passwordValidator(password)) {
       setIsModalVisible(false);
       return;
     } else {
@@ -121,9 +148,7 @@ const LoginForm = () => {
 
   return isLoading ? (
     <ActivityIndicator size="large" color={COLORS.primary} />
-  ) : error ? (
-    <Text>{JSON.stringify(error)}</Text>
-  ) : (
+  )  : (
     <View
       style={{
         marginTop: -66,
@@ -137,9 +162,9 @@ const LoginForm = () => {
     >
       <View style={styles.container}>
         <Text style={styles.loginHeader}>Login </Text>
-        <Text style={styles.emailLabel}>Enter Email Address</Text>
+        <Text style={styles.emailLabel}>Enter Phone</Text>
         <TextInput
-          placeholder="Enter registered email address"
+          placeholder="Enter Phone number"
           style={styles.emailInput}
           onChangeText={(text) => setEmail(text)}
         />

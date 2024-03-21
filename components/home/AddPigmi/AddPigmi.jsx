@@ -18,7 +18,6 @@ const AddPigmi = ({agent,handleClick}) => {
                 
                 <View style={styles.customerWrapper}>
                     <Text style={styles.headerText}>Add Daily Deposit </Text>
-                    <Text style={styles.para}>With one click, you have the power to seamlessly add the daily Pigmi amount to the customer's account, generate a printable slip, and provide it to them</Text>
                 </View>
             </TouchableOpacity>
         </View>
