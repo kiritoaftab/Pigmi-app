@@ -13,6 +13,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 const Start = () => {
     const router = useRouter();
     const params = useGlobalSearchParams();
+    console.log(params.id,"Home page")
 
     const { data, isLoading, error, refetch } = useAgent(params.id);
     
@@ -26,7 +27,9 @@ const Start = () => {
                 options={{
                     headerStyle : {backgroundColor:COLORS.green},
                     headerShadowVisible:false,
-                    headerTitle:''
+                    headerTitle:'',
+                    headerLeft:null,
+                    headerBackVisible:false
                 }}
             />
             <ScrollView 

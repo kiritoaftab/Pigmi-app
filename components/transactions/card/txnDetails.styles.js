@@ -83,7 +83,7 @@ const styles = StyleSheet.create({
         textTransform: 'capitalize',
     },
     bottomRow:{
-        flex:1,
+        display:"flex",
         flexDirection:"row",
         justifyContent:"space-between",
         marginTop:SIZES.medium,

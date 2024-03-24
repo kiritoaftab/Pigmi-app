@@ -11,6 +11,7 @@ import AddMoney from "./money/form/AddMoney";
 import TopTxnBanner from "./transactions/banner/TxnTopbanner";
 import TxnDetails from "./transactions/card/TxnDetails";
 import LoginForm from "./login/LoginForm";
+import TransactionHistory from "./transactionHistory/TransactionHistory";
 
 export {
     Topbanner,
@@ -25,5 +26,6 @@ export {
     AddMoney,
     TopTxnBanner,
     TxnDetails,
-    LoginForm
+    LoginForm,
+    TransactionHistory
 };
