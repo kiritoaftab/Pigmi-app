@@ -24,6 +24,7 @@ import { ActivityIndicator } from "react-native-paper";
 
 const AddMoney = ({ user }) => {
   const router = useRouter();
+  console.log(user.customerAccount,"User customer account")
 
   const [agentId, setAgentId] = useState(null);
   const [date, setDate] = useState(new Date());
@@ -37,10 +38,14 @@ const AddMoney = ({ user }) => {
   const [isUpiButtonDisabled, setIsUpiButtonDisabled] = useState(false);
   const [isCashButtonDisabled, setIsCashButtonDisabled] = useState(false);
 
-  const handleAccountTypeChange = (type) => {
-    setSelectedAccount(
-      user.customerAccount.find((acc) => acc.accountType === type) || null
-    );
+  const handleAccountTypeChange = (type, accountNumber) => {
+    console.log('recieved type and account number',type,accountNumber);
+    Array.isArray(user?.customerAccount) ? user.customerAccount.map((customerAccount,index) => {
+      console.log(customerAccount,"mapoutput");
+      if(customerAccount.accountNumber === accountNumber){
+        setSelectedAccount(customerAccount);
+      }
+    }):``
     setSelectedAccountType(type);
   };
 
@@ -205,7 +210,7 @@ const AddMoney = ({ user }) => {
         <View style={styles.container}>
           <View style={styles.customerWrapper}>
            
-           {/* [id]/[type].js */}
+          
 
             <View style={styles.contentWrapper}>
               <Text style={styles.nameText}>{user.name}</Text>
@@ -254,11 +259,11 @@ const AddMoney = ({ user }) => {
                     renderItem={({ item }) => (
                       <TouchableOpacity
                         onPress={() =>
-                          handleAccountTypeChange(item.accountType)
+                          handleAccountTypeChange(item.accountType, item.accountNumber)
                         }
                         style={[
                           styles.radioButton,
-                          selectedAccountType === item.accountType &&
+                          (selectedAccountType === item.accountType && selectedAccount?.accountNumber === item.accountNumber) && 
                             styles.radioButtonSelected,
                         ]}
                       >
@@ -271,9 +276,10 @@ const AddMoney = ({ user }) => {
             </View>
 
             <View style={styles.accountNumberWrap}>
-              <Text style={styles.accNumHead}>Account Details</Text>
+              
               {selectedAccount && (
                 <>
+                <Text style={styles.accNumHead}>Account Details</Text>
                   <Text style={styles.accountNumber}>
                     Account Number: {selectedAccount.accountNumber}
                   </Text>
@@ -281,13 +287,25 @@ const AddMoney = ({ user }) => {
                     Account Type: {selectedAccount.accountType}
                   </Text>
                   <Text style={styles.balance}>
-                    Rs. {selectedAccount.balance}
+                   {selectedAccount?.accountType === "LOAN" ? `Outstanding Amt`:``} Rs. {selectedAccount.balance}
                   </Text>
                 </>
               )}
             </View>
 
-            <View style={styles.payWrapper}>
+
+              {selectedAccount && (
+                          <View>
+                          <TouchableOpacity style={styles.upiWrapper} onPress={() => router.push(`/payment/${selectedAccount.accountNumber}`)}>
+                            <Text style={styles.upi}>Proceed</Text>
+                          </TouchableOpacity>
+                        </View>
+              )
+
+              }
+
+
+            {/* <View style={styles.payWrapper}>
               <View style={styles.upiContainer}>
                 <Text style={styles.upiLabel}>UPI</Text>
                 <TouchableOpacity
@@ -317,10 +335,10 @@ const AddMoney = ({ user }) => {
                 keyboardType="numeric"
                 style={styles.amount}
               />
-            </View>
+            </View> */}
           </View>
 
-          <Modal
+          {/* <Modal
             visible={isModalVisible}
             animationType="slide"
             presentationStyle="pageSheet"
@@ -343,7 +361,7 @@ const AddMoney = ({ user }) => {
                 <Text style={styles.paymentButton}>Confirm Payment</Text>
               </TouchableOpacity>
             </View>
-          </Modal>
+          </Modal> */}
         </View>
       </TouchableWithoutFeedback>
     </KeyboardAvoidingView>

@@ -8,7 +8,7 @@ import useTransaction from '../../hook/useTransaction';
 
 const Transaction = () => {
     const params = useGlobalSearchParams();
-    console.log(params);
+    console.log(params,"for detail txn id");
 
     const { data, isLoading, error, s3PdfUrl, refetch } = useTransaction(params?.id);
     console.log("DATA" + JSON.stringify(data));
