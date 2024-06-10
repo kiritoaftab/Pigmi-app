@@ -15,7 +15,7 @@ import { shareAsync } from "expo-sharing";
   const handlePrint = () => {
     console.log(`Opening ${s3PdfUrl}`)
     Linking.openURL(s3PdfUrl);
-    router.push(`/home/${data?.agentId}`);
+    router.push(`/pigmi/${data?.agentId}`);
   }
 
   const [selectedPrinter, setSelectedPrinter] = useState();
