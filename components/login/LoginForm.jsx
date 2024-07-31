@@ -34,23 +34,35 @@ const LoginForm = () => {
     }
   }
 
-  const getData = async () => {
-    try {
-      const value = await AsyncStorage.getItem('@agent_id')
-      if(value !== null) {
-        console.log(value," From async storage");
-        router.push(`/home/${value}`);
-      }
-    } catch(e) {
-      console.log(e);
-    }finally{
-      setIsLoading(false);
-    }
-  }
+  // const fetchAgent = async (agentId) => {
+  //   try {
+  //     const res = await axios.get(`${BASE_URL}agent/id/${agentId}`);
+  //     console.log(res.data);
+  //     return res.data.data;
+  //   } catch (error) {
+  //     console.log(error);
+  //     return null;
+  //   }
+  // }
 
-  useEffect(()=> {
-    getData();
-  },[])
+  // const getData = async () => {
+  //   try {
+  //     const value = await AsyncStorage.getItem('@agent_id')
+  //     if(value !== null) {
+  //       console.log(value," From async storage");
+  //       // fetchAgent(value)
+  //       router.push(`/home/${value}`);
+  //     }
+  //   } catch(e) {
+  //     console.log(e);
+  //   }finally{
+  //     setIsLoading(false);
+  //   }
+  // }
+
+  // useEffect(()=> {
+  //   getData();
+  // },[])
 
 
   const loginApiCall = async (email, password) => {
@@ -175,7 +187,7 @@ const LoginForm = () => {
           style={styles.passInput}
           onChangeText={(text) => setPassword(text)}
         />
-        <TouchableOpacity style={styles.loginWrapper} onPress={handleLogin}>
+        <TouchableOpacity style={styles.loginWrapper} onPress={() => handleLogin()}>
           <Text style={styles.login}>LOGIN</Text>
         </TouchableOpacity>
       </View>

@@ -287,7 +287,7 @@ const AddMoney = ({ user }) => {
                     Account Type: {selectedAccount.accountType}
                   </Text>
                   <Text style={styles.balance}>
-                   {selectedAccount?.accountType === "LOAN" ? `Outstanding Amt`:``} Rs. {selectedAccount.balance}
+                   {selectedAccount?.accountType === "LOAN" ? `Outstanding Amt`:``} Rs. {parseInt(selectedAccount.balance)}
                   </Text>
                 </>
               )}

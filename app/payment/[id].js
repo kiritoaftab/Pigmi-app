@@ -181,7 +181,7 @@ const Payment = () => {
                 fontWeight: 600,
               }}
             >
-              Rs. {data.balance}
+              Rs. {parseInt(data.balance)}
             </Text>
           </View>
           <View style={styles.amountWrapper}>

@@ -14,12 +14,11 @@ import { COLORS, icons, images, SIZES } from "../constants";
 
 import { Topbanner, AddCustomer, AddPigmi, TopTxnBanner , LoginForm } from "../components";
 
-const [isLoading,setIsLoading] = useState(false);
 
 const Home = () => {
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.gray2 }}>
-      <Stack.Screen
+      {/* <Stack.Screen
         options={{
           headerStyle: { backgroundColor: COLORS.green },
           headerShadowVisible: false,
@@ -40,7 +39,10 @@ const Home = () => {
           <TopTxnBanner />
         </View>
             <LoginForm/>
-      </ScrollView>
+      </ScrollView> */}
+      <View>
+        <Text>Hello world</Text>
+      </View>
     </SafeAreaView>
   );
 };
