@@ -18,7 +18,7 @@ import { Topbanner, AddCustomer, AddPigmi, TopTxnBanner , LoginForm } from "../c
 const Home = () => {
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.gray2 }}>
-      {/* <Stack.Screen
+      <Stack.Screen
         options={{
           headerStyle: { backgroundColor: COLORS.green },
           headerShadowVisible: false,
@@ -39,10 +39,10 @@ const Home = () => {
           <TopTxnBanner />
         </View>
             <LoginForm/>
-      </ScrollView> */}
-      <View>
+      </ScrollView>
+      {/* <View>
         <Text>Hello world</Text>
-      </View>
+      </View> */}
     </SafeAreaView>
   );
 };

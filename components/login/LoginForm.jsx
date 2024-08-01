@@ -27,43 +27,44 @@ const LoginForm = () => {
 
   const storeData = async (value) => {
     try {
-      await AsyncStorage.setItem('@agent_id', value)
+      await AsyncStorage.setItem("@agent_id", value);
     } catch (e) {
       // saving error
       console.log(error);
     }
-  }
+  };
 
-  // const fetchAgent = async (agentId) => {
-  //   try {
-  //     const res = await axios.get(`${BASE_URL}agent/id/${agentId}`);
-  //     console.log(res.data);
-  //     return res.data.data;
-  //   } catch (error) {
-  //     console.log(error);
-  //     return null;
-  //   }
-  // }
+  const fetchAgent = async (agentId) => {
+    try {
+      const res = await axios.get(`${BASE_URL}agent/id/${agentId}`);
+      console.log(res.data, " Fetching agent api call");
+      return res.data.data;
+    } catch (error) {
+      console.log(error);
+      return null;
+    }
+  };
 
-  // const getData = async () => {
-  //   try {
-  //     const value = await AsyncStorage.getItem('@agent_id')
-  //     if(value !== null) {
-  //       console.log(value," From async storage");
-  //       // fetchAgent(value)
-  //       router.push(`/home/${value}`);
-  //     }
-  //   } catch(e) {
-  //     console.log(e);
-  //   }finally{
-  //     setIsLoading(false);
-  //   }
-  // }
+  const getData = async () => {
+    try {
+      const value = await AsyncStorage.getItem("@agent_id");
+      if (value !== null) {
+        console.log(value, " From async storage");
+        const agent = await fetchAgent(value);
+        if (agent.status) {
+          router.push(`/home/${value}`);
+        }
+      }
+    } catch (e) {
+      console.log(e);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
-  // useEffect(()=> {
-  //   getData();
-  // },[])
-
+  useEffect(() => {
+    getData();
+  }, []);
 
   const loginApiCall = async (email, password) => {
     const url = BASE_URL + "agent/agentLogin/email/" + email + "/" + password;
@@ -72,7 +73,7 @@ const LoginForm = () => {
       const response = await axios.get(url);
       console.log(response.data.data);
       setData(response.data.data);
-     
+
       setIsLoading(false);
       console.log(data);
       storeData(response.data.data?.id);
@@ -89,10 +90,9 @@ const LoginForm = () => {
   };
 
   const handleLogin = () => {
-     
     console.log(`Phone = ${email} | Password = ${password}`);
-    
-     if (!passwordValidator(password)) {
+
+    if (!passwordValidator(password)) {
       setIsModalVisible(false);
       return;
     } else {
@@ -116,7 +116,6 @@ const LoginForm = () => {
       setIsModalVisible(false);
       alert("Otp verified");
       router.push(`/home/${data?.id}`);
-
     } catch (error) {
       console.log(error);
       // setError(error);
@@ -130,7 +129,6 @@ const LoginForm = () => {
 
   const handleOtp = () => {
     if (otp && otp.length === 4) {
-      
       setIsLoading(true);
       otpApiCall(otp);
     } else {
@@ -160,7 +158,7 @@ const LoginForm = () => {
 
   return isLoading ? (
     <ActivityIndicator size="large" color={COLORS.primary} />
-  )  : (
+  ) : (
     <View
       style={{
         marginTop: -66,
@@ -187,7 +185,10 @@ const LoginForm = () => {
           style={styles.passInput}
           onChangeText={(text) => setPassword(text)}
         />
-        <TouchableOpacity style={styles.loginWrapper} onPress={() => handleLogin()}>
+        <TouchableOpacity
+          style={styles.loginWrapper}
+          onPress={() => handleLogin()}
+        >
           <Text style={styles.login}>LOGIN</Text>
         </TouchableOpacity>
       </View>
